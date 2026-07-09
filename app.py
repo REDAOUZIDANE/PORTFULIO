@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import pandas as pd
 import streamlit as st
@@ -367,6 +368,25 @@ st.markdown(
         0% { background-position: -400px 0; }
         100% { background-position: 400px 0; }
     }
+    @keyframes borderCycle {
+        0%, 100% { border-left-color: #6f93b8; }
+        50% { border-left-color: #c9a15a; }
+    }
+    @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+    @keyframes blinkCursor {
+        50% { border-right-color: transparent; }
+    }
+    @keyframes floatY {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    @keyframes resultGlow {
+        0%, 100% { text-shadow: 0 0 0 rgba(201,161,90,0); }
+        50% { text-shadow: 0 0 10px rgba(201,161,90,0.55); }
+    }
 
     .hero-card {
         background: #151920;
@@ -374,10 +394,16 @@ st.markdown(
         border-left: 3px solid #6f93b8;
         border-radius: 6px;
         padding: 2.2rem 2.4rem;
-        animation: fadeInUp 0.55s ease both;
-        transition: border-left-color 0.4s ease;
+        animation: fadeInUp 0.55s ease both, borderCycle 6s ease-in-out infinite;
     }
-    .hero-card:hover { border-left-color: #c9a15a; }
+
+    .typewriter {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #6f93b8;
+        max-width: 100%;
+    }
 
     .status-dot {
         display: inline-block;
@@ -387,6 +413,11 @@ st.markdown(
         background: #4caf7d;
         margin-right: 0.5rem;
         animation: pulseDot 2.2s infinite;
+    }
+
+    div[data-testid="stSidebar"] div[data-testid="stImage"] img {
+        animation: floatY 4s ease-in-out infinite;
+        border-radius: 8px;
     }
 
     .badge {
@@ -400,12 +431,15 @@ st.markdown(
         font-size: 0.8rem;
         font-weight: 500;
         letter-spacing: 0.01em;
-        transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        opacity: 0;
+        animation: fadeInUp 0.4s ease both;
+        transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
     .badge:hover {
         transform: translateY(-2px);
         border-color: #6f93b8;
         color: #eef1f4;
+        box-shadow: 0 4px 14px rgba(111,147,184,0.25);
     }
 
     .card {
@@ -438,6 +472,7 @@ st.markdown(
         font-weight: 600;
         font-size: 0.88rem;
         margin-top: 0.4rem;
+        animation: resultGlow 3s ease-in-out infinite;
     }
 
     .cert-chip {
@@ -450,7 +485,11 @@ st.markdown(
         animation: fadeInUp 0.5s ease both;
         transition: border-color 0.2s ease, transform 0.2s ease;
     }
-    .cert-chip:hover { border-color: #6f93b8; transform: translateX(3px); }
+    .cert-chip:hover {
+        border-color: #6f93b8;
+        transform: translateX(3px);
+        box-shadow: 0 4px 16px rgba(111,147,184,0.2);
+    }
     .cert-chip b { color: #e6e9ee; }
     .cert-chip span { color: #838d99; font-size: 0.78rem; }
 
@@ -537,14 +576,16 @@ with st.sidebar:
 # ---------------------------------------------------------------------------
 # Hero (always visible at top)
 # ---------------------------------------------------------------------------
-badges_html = "".join(f'<span class="badge">{b}</span>' for b in content["badges"])
+SUBTITLE = "Ingénieur d'État en Génie Industriel · Cybersécurité & Industrie 4.0"
+badges_html = "".join(
+    f'<span class="badge" style="animation-delay:{0.05 * i:.2f}s">{b}</span>'
+    for i, b in enumerate(content["badges"])
+)
 st.markdown(
     f"""
     <div class="hero-card">
         <h1>Ouzidane Reda</h1>
-        <p style="font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem;">
-            Ingénieur d'État en Génie Industriel · Cybersécurité & Industrie 4.0
-        </p>
+        <p class="typewriter" style="width:{len(SUBTITLE)}ch; animation: typing 1.8s steps({len(SUBTITLE)}, end) both, blinkCursor 0.8s step-end infinite; font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem;">{SUBTITLE}</p>
         <p style="color:#9aa3af; margin-top:0.8rem; max-width:56rem;">{content['tagline']}</p>
         <div style="margin-top:1rem;">{badges_html}</div>
     </div>
@@ -554,13 +595,55 @@ st.markdown(
 
 st.write("")
 
+
+def split_stat_num(num_str: str):
+    match = re.match(r"^([\d\s]+)(.*)$", num_str.strip())
+    if match and match.group(1).replace(" ", "").isdigit():
+        return match.group(1).replace(" ", ""), match.group(2)
+    return None, num_str
+
+
 stat_cols = st.columns(len(content["stats"]))
-for col, s in zip(stat_cols, content["stats"]):
+for i, (col, s) in enumerate(zip(stat_cols, content["stats"])):
     with col:
+        target, suffix = split_stat_num(s["num"])
+        if target:
+            num_html = f'<div class="num count-num" data-target="{target}" data-suffix="{suffix}">0</div>'
+        else:
+            num_html = f'<div class="num">{s["num"]}</div>'
         st.markdown(
-            f'<div class="stat-box"><div class="num">{s["num"]}</div><div class="lbl">{s["label"]}</div></div>',
+            f'<div class="stat-box" style="animation-delay:{0.08 * i:.2f}s">{num_html}'
+            f'<div class="lbl">{s["label"]}</div></div>',
             unsafe_allow_html=True,
         )
+
+st.iframe(
+    """
+    <script>
+    (function animateCounts() {
+        const doc = window.parent.document;
+        const counters = doc.querySelectorAll('.count-num:not([data-done])');
+        counters.forEach(el => {
+            el.setAttribute('data-done', '1');
+            const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+            const suffix = el.getAttribute('data-suffix') || '';
+            const duration = 1100;
+            const startTime = performance.now();
+            function step(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = Math.floor(eased * target);
+                el.textContent = value.toLocaleString('fr-FR') + suffix;
+                if (progress < 1) { requestAnimationFrame(step); }
+                else { el.textContent = target.toLocaleString('fr-FR') + suffix; }
+            }
+            requestAnimationFrame(step);
+        });
+    })();
+    </script>
+    """,
+    height=1,
+)
 
 st.write("")
 
