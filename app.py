@@ -6,12 +6,14 @@ import streamlit as st
 # ---------------------------------------------------------------------------
 st.set_page_config(
     page_title="Ouzidane Reda | Portfolio",
-    page_icon="🛡️",
+    page_icon="R",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 IMG_DIR = "images"
+UPLOAD_DIR = os.path.join(IMG_DIR, "uploads")
+CV_PATH = os.path.join("documents", "CV_Ouzidane_Reda.pdf")
 
 
 def img_path(filename: str) -> str | None:
@@ -28,11 +30,31 @@ def safe_image(filename: str, caption: str = "", use_container_width: bool = Tru
         st.markdown(
             f"""
             <div class="img-placeholder">
-                <span>📷 Ajouter <code>images/{filename}</code></span>
+                <span>Ajouter <code>images/{filename}</code></span>
             </div>
             """,
             unsafe_allow_html=True,
         )
+
+
+def get_admin_password() -> str:
+    try:
+        return st.secrets["ADMIN_PASSWORD"]
+    except Exception:
+        return os.environ.get("ADMIN_PASSWORD", "changeme123")
+
+
+def cv_download_button(key: str):
+    if os.path.exists(CV_PATH):
+        with open(CV_PATH, "rb") as f:
+            st.download_button(
+                "Télécharger le CV (PDF)",
+                f,
+                file_name="CV_Ouzidane_Reda.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+                key=key,
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -41,109 +63,135 @@ def safe_image(filename: str, caption: str = "", use_container_width: bool = Tru
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
     .stApp {
-        background: radial-gradient(circle at 15% 0%, #12222b 0%, #0b1418 45%, #090f12 100%);
-        color: #e6edf0;
+        background: #10131a;
+        color: #e6e9ee;
     }
 
     section[data-testid="stSidebar"] {
-        background: #0d1a20;
-        border-right: 1px solid rgba(45, 212, 191, 0.15);
+        background: #0c0e13;
+        border-right: 1px solid #232833;
     }
 
-    h1, h2, h3, h4 { color: #f2f7f6 !important; font-weight: 700 !important; }
-
-    .accent { color: #2dd4bf; }
+    h1, h2, h3, h4 {
+        font-family: 'Source Serif 4', Georgia, serif !important;
+        color: #f2f3f5 !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em;
+    }
 
     .hero-card {
-        background: linear-gradient(135deg, rgba(45,212,191,0.08), rgba(56,189,248,0.04));
-        border: 1px solid rgba(45,212,191,0.25);
-        border-radius: 18px;
-        padding: 2rem 2.2rem;
+        background: #151920;
+        border: 1px solid #262c38;
+        border-left: 3px solid #6f93b8;
+        border-radius: 6px;
+        padding: 2.2rem 2.4rem;
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4caf7d;
+        margin-right: 0.5rem;
     }
 
     .badge {
         display: inline-block;
-        padding: 0.28rem 0.75rem;
-        margin: 0.18rem 0.3rem 0.18rem 0;
-        border-radius: 999px;
-        background: rgba(45,212,191,0.12);
-        border: 1px solid rgba(45,212,191,0.35);
-        color: #7ee8d8;
-        font-size: 0.82rem;
+        padding: 0.3rem 0.8rem;
+        margin: 0.2rem 0.35rem 0.2rem 0;
+        border-radius: 4px;
+        background: #1a1f28;
+        border: 1px solid #2a3038;
+        color: #b7c1cc;
+        font-size: 0.8rem;
         font-weight: 500;
-    }
-
-    .badge-open {
-        background: rgba(34,197,94,0.15);
-        border: 1px solid rgba(34,197,94,0.45);
-        color: #86efac;
+        letter-spacing: 0.01em;
     }
 
     .card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 1.4rem 1.5rem;
-        margin-bottom: 1.1rem;
-        transition: border-color 0.2s ease, transform 0.2s ease;
+        background: #151920;
+        border: 1px solid #232833;
+        border-radius: 6px;
+        padding: 1.5rem 1.7rem;
+        margin-bottom: 1.2rem;
     }
-    .card:hover {
-        border-color: rgba(45,212,191,0.4);
-        transform: translateY(-2px);
-    }
+    .card:hover { border-color: #3a4250; }
 
-    .card h4 { margin-bottom: 0.15rem !important; }
-    .card .meta { color: #8fa3a8; font-size: 0.88rem; margin-bottom: 0.6rem; }
-    .card .impact {
-        color: #2dd4bf;
+    .card h4 { margin-bottom: 0.2rem !important; font-size: 1.15rem !important; }
+    .card .meta { color: #838d99; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .card .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.72rem;
+        color: #6f93b8;
         font-weight: 600;
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
+        margin-bottom: 0.3rem;
+    }
+    .card .result {
+        color: #c9a15a;
+        font-weight: 600;
+        font-size: 0.88rem;
+        margin-top: 0.4rem;
     }
 
     .cert-chip {
-        background: rgba(56,189,248,0.06);
-        border: 1px solid rgba(56,189,248,0.25);
-        border-radius: 12px;
-        padding: 0.7rem 0.9rem;
+        background: #151920;
+        border: 1px solid #232833;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
         margin-bottom: 0.6rem;
-        font-size: 0.88rem;
+        font-size: 0.87rem;
     }
-    .cert-chip b { color: #e6edf0; }
-    .cert-chip span { color: #7fb8d6; font-size: 0.78rem; }
+    .cert-chip b { color: #e6e9ee; }
+    .cert-chip span { color: #838d99; font-size: 0.78rem; }
 
     .img-placeholder {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 180px;
-        border: 1.5px dashed rgba(255,255,255,0.18);
-        border-radius: 14px;
-        color: #6b7d82;
-        font-size: 0.85rem;
-        background: rgba(255,255,255,0.02);
+        height: 170px;
+        border: 1px dashed #2a3038;
+        border-radius: 6px;
+        color: #5c6672;
+        font-size: 0.82rem;
+        background: #12151b;
         text-align: center;
         padding: 1rem;
     }
 
     .stat-box {
         text-align: center;
-        padding: 0.9rem 0.5rem;
-        border-radius: 14px;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
+        padding: 1rem 0.5rem;
+        border-radius: 6px;
+        background: #151920;
+        border: 1px solid #232833;
     }
-    .stat-box .num { font-size: 1.6rem; font-weight: 800; color: #2dd4bf; }
-    .stat-box .lbl { font-size: 0.78rem; color: #9db0b5; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-box .num {
+        font-family: 'Source Serif 4', serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #eef1f4;
+    }
+    .stat-box .lbl {
+        font-size: 0.74rem;
+        color: #838d99;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.2rem;
+    }
 
-    a { color: #5eead4 !important; }
+    a { color: #8fb2d6 !important; text-decoration: none !important; }
+    a:hover { text-decoration: underline !important; }
 
-    hr { border-color: rgba(255,255,255,0.08); }
+    hr { border-color: #232833; }
+
+    table td { border-bottom: 1px solid #1e232c; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -216,7 +264,7 @@ PROJECTS = [
         "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
         "category": "Cybersécurité / Industrie 4.0",
         "meta": "Équipe Secure Prod (avec Kaouthar Belkebir) · Teal Technology Services · Jul. 2025",
-        "result": "🥇 1st Place",
+        "result": "1st Place",
         "prize": "30 000 DHS",
         "abstract": "Les réseaux SCADA/ICS ont vu une hausse documentée de 54% des attaques ciblées, tout en "
         "reposant sur des protocoles historiques (Modbus TCP, DNP3) sans authentification ni chiffrement natifs. "
@@ -237,7 +285,7 @@ PROJECTS = [
         "title": "NEURO FIT — Gamified EMG Biofeedback for Muscular Rehabilitation",
         "category": "Santé Digitale / Gamification",
         "meta": "Équipe ESITH — Reda et al. · Game4Health, ISMAGI Rabat × SmartTech Lab · 4 avr. 2026",
-        "result": "🥈 2nd Place",
+        "result": "2nd Place",
         "prize": "6 000 DHS",
         "abstract": "L'adhérence aux protocoles de rééducation musculaire est limitée par le manque de retour "
         "immédiat des exercices classiques de physiothérapie. NEURO FIT capte le signal EMG de surface (sEMG) "
@@ -258,7 +306,7 @@ PROJECTS = [
         "title": "Vamosway — Full-Stack Mobility & Travel Web Application",
         "category": "Web Application / Mobilité",
         "meta": "Équipe Vamosway · ACCEDE Internationale · Track Sciences et Technologie",
-        "result": "🥇 1st Place",
+        "result": "1st Place",
         "prize": "10 000 DHS",
         "abstract": "Application web full-stack conçue et livrée dans la fenêtre fixe d'un hackathon pour "
         "répondre à un enjeu de mobilité du track « Sciences et Technologie ». Priorité donnée à un parcours "
@@ -276,7 +324,7 @@ PROJECTS = [
         "title": "AI for Social Impact — Applied Machine Learning Prototype",
         "category": "Intelligence Artificielle Appliquée",
         "meta": "Équipe ESITH — Reda Ouzidane · Hackathon ESITH Casablanca · Track AI for Social Impact",
-        "result": "🥈 2nd Place",
+        "result": "2nd Place",
         "prize": None,
         "abstract": "Prototype IA fonctionnel développé pour répondre à un besoin social réel plutôt qu'à une "
         "simple preuve de concept sur données synthétiques, dans le cadre du track « AI for Social Impact » "
@@ -293,7 +341,7 @@ PROJECTS = [
         "title": "Le Phare de l'Entrepreneuriat — Social-Impact Venture Award",
         "category": "Entrepreneuriat Social",
         "meta": "Reda Ouzidane · KEDGE Business School · 15 mai 2025",
-        "result": "🏅 Prix Impact Positif & Social",
+        "result": "Prix Impact Positif & Social",
         "prize": "10 000 DHS",
         "abstract": "Compétition d'entrepreneuriat de KEDGE Business School évaluant les ventures candidates sur "
         "deux axes combinés : viabilité entrepreneuriale et impact social positif démontrable. La venture a été "
@@ -310,7 +358,7 @@ PROJECTS = [
         "title": "Industry 4.0, AI & Cybersecurity for Smart Manufacturing",
         "category": "Industrie 4.0 / Smart Manufacturing",
         "meta": "Ouzidane R., Baroudi M., Fahsi Y. · ESITH, Maroc · IEEE ICCITX.0 2026, Paris",
-        "result": "🌍 Top 10 Finalist",
+        "result": "Top 10 Finalist",
         "prize": "77 projets · 5 pays",
         "abstract": "Projet de recherche et d'innovation à l'intersection de l'Industrie 4.0, de l'IA, de la "
         "cybersécurité et du smart manufacturing, soumis au concours d'innovation CITx.C 2026. Sélectionné "
@@ -329,7 +377,7 @@ PROJECTS = [
         "title": "Red Team Practitioner — Offensive Security Track",
         "category": "Sécurité Offensive",
         "meta": "TryHackMe · Profil : tryhackme.com/p/OUZIDANEREDA",
-        "result": "🏆 Top 5%",
+        "result": "Top 5%",
         "prize": None,
         "abstract": "Parcours pratique de sécurité offensive développé via des labs hands-on couvrant l'ensemble "
         "du cycle de vie d'un adversaire — de la reconnaissance initiale au reporting post-exploitation. "
@@ -377,8 +425,10 @@ SKILLS = [
 
 CONTACT = {
     "linkedin": "https://www.linkedin.com/in/ouzidane-reda-a9b010295",
+    "email": "redaouzidan@gmail.com",
+    "phone": "",
     "location": "Casablanca-Settat, Maroc",
-    "tagline": "$ whoami → \"An engineer who understands hacking and systems deeply.\"",
+    "tagline": "Ingénieur passionné par la cybersécurité offensive et l'optimisation des systèmes industriels.",
 }
 
 # ---------------------------------------------------------------------------
@@ -389,18 +439,20 @@ with st.sidebar:
     st.markdown("### Ouzidane Reda")
     st.caption("Ingénieur d'État en Génie Industriel")
     st.markdown(
-        '<span class="badge badge-open">🟢 Open to work</span>',
+        '<span class="status-dot"></span><span style="color:#9aa3af; font-size:0.85rem;">'
+        "Ouvert aux opportunités</span>",
         unsafe_allow_html=True,
     )
     st.markdown("---")
     section = st.radio(
         "Navigation",
-        ["Accueil", "Expérience", "Hackathons & Projets", "Formation", "Certifications", "Contact"],
+        ["Accueil", "Expérience", "Hackathons & Projets", "Formation", "Certifications", "Contact", "Espace privé"],
         label_visibility="collapsed",
     )
     st.markdown("---")
-    st.markdown(f"[🔗 Profil LinkedIn]({CONTACT['linkedin']})")
-    st.caption(f"📍 {CONTACT['location']}")
+    cv_download_button(key="cv_sidebar")
+    st.markdown(f"[Profil LinkedIn]({CONTACT['linkedin']})")
+    st.caption(CONTACT["location"])
 
 # ---------------------------------------------------------------------------
 # Hero (always visible at top)
@@ -409,16 +461,16 @@ st.markdown(
     f"""
     <div class="hero-card">
         <h1>Ouzidane Reda</h1>
-        <p style="font-size:1.15rem; color:#b7c6ca; margin-top:-0.6rem;">
-            Ingénieur d'État en Génie Industriel · Passionné de Cybersécurité & Industrie 4.0
+        <p style="font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem;">
+            Ingénieur d'État en Génie Industriel · Cybersécurité & Industrie 4.0
         </p>
-        <p style="font-family: monospace; color:#5eead4; margin-top:0.8rem;">{CONTACT['tagline']}</p>
-        <div style="margin-top:0.8rem;">
-            <span class="badge">🏭 Génie Industriel</span>
-            <span class="badge">🔐 Cybersécurité</span>
-            <span class="badge">🤖 IA Appliquée</span>
-            <span class="badge">📦 Supply Chain</span>
-            <span class="badge">⚙️ Industrie 4.0</span>
+        <p style="color:#9aa3af; margin-top:0.8rem; max-width:56rem;">{CONTACT['tagline']}</p>
+        <div style="margin-top:1rem;">
+            <span class="badge">Génie Industriel</span>
+            <span class="badge">Cybersécurité</span>
+            <span class="badge">IA Appliquée</span>
+            <span class="badge">Supply Chain</span>
+            <span class="badge">Industrie 4.0</span>
         </div>
     </div>
     """,
@@ -494,7 +546,7 @@ elif section == "Expérience":
                             <h4>{exp['role']}</h4>
                             <div class="meta">{exp['org']} · {exp['period']}</div>
                             <p>{exp['desc']}</p>
-                            {f'<div class="impact">📈 {exp["impact"]}</div>' if exp['impact'] else ''}
+                            {f'<div class="result">{exp["impact"]}</div>' if exp['impact'] else ''}
                         </div>
                         """,
                         unsafe_allow_html=True,
@@ -506,7 +558,7 @@ elif section == "Expérience":
                         <h4>{exp['role']}</h4>
                         <div class="meta">{exp['org']} · {exp['period']}</div>
                         <p>{exp['desc']}</p>
-                        {f'<div class="impact">📈 {exp["impact"]}</div>' if exp['impact'] else ''}
+                        {f'<div class="result">{exp["impact"]}</div>' if exp['impact'] else ''}
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -518,17 +570,17 @@ elif section == "Hackathons & Projets":
     for p in PROJECTS:
         prize_html = f" · <b>{p['prize']}</b>" if p["prize"] else ""
         specs_rows = "".join(
-            f"<tr><td style='padding:0.3rem 0.8rem 0.3rem 0; color:#8fa3a8; white-space:nowrap;'>{k}</td>"
-            f"<td style='padding:0.3rem 0; color:#dbe6e8;'>{v}</td></tr>"
+            f"<tr><td style='padding:0.3rem 0.8rem 0.3rem 0; color:#838d99; white-space:nowrap;'>{k}</td>"
+            f"<td style='padding:0.3rem 0; color:#d5dae0;'>{v}</td></tr>"
             for k, v in p["specs"]
         )
         st.markdown(
             f"""
             <div class="card">
-                <div class="meta" style="text-transform:uppercase; letter-spacing:0.05em; font-size:0.75rem;">{p['category']}</div>
+                <div class="eyebrow">{p['category']}</div>
                 <h4>{p['title']}</h4>
                 <div class="meta">{p['meta']}</div>
-                <div class="impact">{p['result']}{prize_html}</div>
+                <div class="result">{p['result']}{prize_html}</div>
                 <p style="margin-top:0.7rem;">{p['abstract']}</p>
                 <table style="width:100%; border-collapse:collapse; margin-top:0.6rem; font-size:0.85rem;">
                     {specs_rows}
@@ -577,16 +629,83 @@ elif section == "Certifications":
                 unsafe_allow_html=True,
             )
 
+    uploaded_files = sorted(os.listdir(UPLOAD_DIR)) if os.path.isdir(UPLOAD_DIR) else []
+    image_files = [f for f in uploaded_files if f.lower().endswith((".png", ".jpg", ".jpeg"))]
+    if image_files:
+        st.subheader("Diplômes & certificats (scans)")
+        gcols = st.columns(4)
+        for i, fname in enumerate(image_files):
+            with gcols[i % 4]:
+                st.image(os.path.join(UPLOAD_DIR, fname), caption=fname, use_container_width=True)
+
 elif section == "Contact":
     st.header("Contact")
     st.write(
         "Ouvert aux opportunités en tant qu'Ingénieur Industriel, Ingénieur IA, Software Engineer ou "
         "Ingénieur Transformation Digitale."
     )
-    st.markdown(f"🔗 **LinkedIn** : [{CONTACT['linkedin']}]({CONTACT['linkedin']})")
-    st.markdown(f"📍 **Localisation** : {CONTACT['location']}")
-    st.markdown("🏢 **Entreprise actuelle** : DOUNITEX Confection SA")
-    st.markdown("🎓 **Formation** : ESITH Casablanca")
+    st.markdown(f"**LinkedIn** : [{CONTACT['linkedin']}]({CONTACT['linkedin']})")
+    st.markdown(f"**Email** : {CONTACT['email']}")
+    if CONTACT["phone"]:
+        st.markdown(f"**Téléphone** : {CONTACT['phone']}")
+    st.markdown(f"**Localisation** : {CONTACT['location']}")
+    st.markdown("**Formation** : ESITH Casablanca")
+    st.write("")
+    cv_download_button(key="cv_contact")
+
+elif section == "Espace privé":
+    st.header("Espace privé")
+    st.caption("Zone réservée — ajout de certificats, diplômes et photos supplémentaires.")
+
+    if "admin_ok" not in st.session_state:
+        st.session_state.admin_ok = False
+
+    if not st.session_state.admin_ok:
+        pwd = st.text_input("Mot de passe", type="password")
+        if st.button("Se connecter"):
+            if pwd and pwd == get_admin_password():
+                st.session_state.admin_ok = True
+                st.rerun()
+            else:
+                st.error("Mot de passe incorrect.")
+    else:
+        st.success("Accès autorisé.")
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+        uploaded = st.file_uploader(
+            "Ajouter des fichiers (certificats, diplômes, photos)",
+            type=["png", "jpg", "jpeg", "pdf"],
+            accept_multiple_files=True,
+        )
+        if uploaded:
+            for f in uploaded:
+                dest = os.path.join(UPLOAD_DIR, f.name)
+                with open(dest, "wb") as out:
+                    out.write(f.getbuffer())
+            st.success(f"{len(uploaded)} fichier(s) ajouté(s).")
+            st.rerun()
+
+        existing = sorted(os.listdir(UPLOAD_DIR)) if os.path.isdir(UPLOAD_DIR) else []
+        if existing:
+            st.subheader("Fichiers enregistrés")
+            gcols = st.columns(4)
+            for i, fname in enumerate(existing):
+                fpath = os.path.join(UPLOAD_DIR, fname)
+                with gcols[i % 4]:
+                    if fname.lower().endswith((".png", ".jpg", ".jpeg")):
+                        st.image(fpath, caption=fname, use_container_width=True)
+                    else:
+                        st.markdown(f"**{fname}**")
+                    if st.button("Supprimer", key=f"del_{fname}"):
+                        os.remove(fpath)
+                        st.rerun()
+        else:
+            st.info("Aucun fichier pour le moment.")
+
+        st.write("")
+        if st.button("Se déconnecter"):
+            st.session_state.admin_ok = False
+            st.rerun()
 
 st.markdown("---")
-st.caption("Portfolio généré avec Streamlit · Données issues du profil LinkedIn de Ouzidane Reda")
+st.caption("Portfolio — Ouzidane Reda")
