@@ -40,8 +40,8 @@ DEFAULT_CONTENT = {
         "location": "Casablanca-Settat, Maroc",
     },
     "stats": [
-        {"num": "7", "label": "Projets & hackathons"},
-        {"num": "18", "label": "Certifications"},
+        {"num": "8", "label": "Projets & hackathons"},
+        {"num": "19", "label": "Certifications"},
         {"num": "2 968", "label": "Abonnés LinkedIn"},
         {"num": "500+", "label": "Relations"},
         {"num": "5", "label": "Pays au concours IEEE"},
@@ -51,11 +51,13 @@ DEFAULT_CONTENT = {
             "role": "PFE Intern – Industry 4.0 & Digitalization Consultant",
             "org": "DOUNITEX Confection SA",
             "period": "Mars 2026 – Juin 2026 · 4 mois",
-            "desc": "Conception et déploiement d'un Warehouse Management System (WMS) pour optimiser la gestion "
-            "des stocks et fluidifier les flux logistiques. Analyse des processus existants, identification des "
-            "goulots d'étranglement (suivi manuel, incohérences de données, retards d'information) et "
-            "déploiement d'une solution digitale centralisée.",
-            "impact": "Gain d'efficacité opérationnelle estimé à +30% · Impact 240 000 MAD/an",
+            "desc": "Conception et déploiement de WMS DOUNITEX, un Warehouse Management System sur mesure piloté "
+            "par l'IA (React.js, Flask/Python, PostgreSQL) pour digitaliser la gestion des stocks, fiabiliser "
+            "les données et anticiper les ruptures. Tableau de bord stratégique temps réel, prévision de la "
+            "demande par IA et conception d'entrepôt 2D/3D.",
+            "impact": "+33% de gain de temps moyen · Temps de recherche ÷4 · 100% de traçabilité des flux · "
+            "75% de précision des prévisions IA · 1 688 min économisées sur 150 opérations · 0 coût de licence "
+            "(open-source)",
             "image": "pfe_defense.jpg",
         },
         {
@@ -105,6 +107,28 @@ DEFAULT_CONTENT = {
         },
     ],
     "projects": [
+        {
+            "title": "WMS DOUNITEX — Warehouse Management System piloté par l'IA",
+            "category": "Supply Chain / Industrie 4.0",
+            "meta": "PFE — DOUNITEX Confection SA × ESITH Smart Factory · 2026",
+            "result": "Déployé en production",
+            "prize": "",
+            "abstract": "Solution WMS sur mesure conçue pour digitaliser la gestion des stocks d'une PME "
+            "industrielle et textile, fiabiliser les données et anticiper les ruptures grâce à l'IA. La "
+            "plateforme centralise la gestion des articles et de l'inventaire, la réception/sortie des flux, "
+            "le contrôle qualité, les demandes d'achat automatisées et un tableau de bord stratégique en temps "
+            "réel, avec une conception d'entrepôt en 2D/3D.",
+            "specs_text": "Gain de temps moyen: +33%\n"
+            "Temps de recherche: ÷4\n"
+            "Traçabilité des flux: 100%\n"
+            "Précision des prévisions IA: 75%\n"
+            "Minutes économisées: 1 688 min sur 150 opérations mesurées\n"
+            "Coût de licence: 0 (solution open-source)\n"
+            "Stack technique: React.js (SPA) · Flask/Python (API REST) · PostgreSQL · ORM SQLAlchemy · "
+            "déploiement LAN\n"
+            "Méthodologie: Cadrage → Conception → Conduite → Clôture (4C)",
+            "images": "pfe_defense.jpg",
+        },
         {
             "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
             "category": "Cybersécurité / Industrie 4.0",
@@ -233,6 +257,7 @@ DEFAULT_CONTENT = {
         {"name": "Data Science", "issuer": "DataCamp"},
         {"name": "Google Project Management", "issuer": "Google"},
         {"name": "Data Science", "issuer": "IBM"},
+        {"name": "Machine Learning", "issuer": "IBM"},
         {"name": "API Penetration Testing", "issuer": "APIsec University"},
         {"name": "CS50x", "issuer": "Harvard University"},
         {"name": "Windows Privilege Escalation", "issuer": "Hack The Box"},
