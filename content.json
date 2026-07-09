@@ -1,0 +1,250 @@
+{
+  "tagline": "Ingénieur passionné par la cybersécurité offensive et l'optimisation des systèmes industriels.",
+  "skills": [
+    "Penetration Testing",
+    "Red Teaming",
+    "Web Exploitation (XSS, SQLi, IDOR, SSRF)",
+    "JWT / Auth Attacks",
+    "Active Directory Attacks",
+    "Reverse Engineering",
+    "Warehouse Management Systems (WMS)",
+    "Lean Six Sigma",
+    "Industry 4.0",
+    "Data Analytics",
+    "Machine Learning",
+    "MERN Stack (MongoDB, Express, React, Node)",
+    "Process Optimization",
+    "Supply Chain & Logistique"
+  ],
+  "badges": [
+    "Génie Industriel",
+    "Cybersécurité",
+    "IA Appliquée",
+    "Supply Chain",
+    "Industrie 4.0"
+  ],
+  "contact": {
+    "linkedin": "https://www.linkedin.com/in/ouzidane-reda-a9b010295",
+    "email": "redaouzidan@gmail.com",
+    "phone": "",
+    "location": "Casablanca-Settat, Maroc"
+  },
+  "stats": [
+    {
+      "num": "7",
+      "label": "Projets & hackathons"
+    },
+    {
+      "num": "18",
+      "label": "Certifications"
+    },
+    {
+      "num": "2 968",
+      "label": "Abonnés LinkedIn"
+    },
+    {
+      "num": "500+",
+      "label": "Relations"
+    },
+    {
+      "num": "5",
+      "label": "Pays au concours IEEE"
+    }
+  ],
+  "experience": [
+    {
+      "role": "PFE Intern – Industry 4.0 & Digitalization Consultant",
+      "org": "DOUNITEX Confection SA",
+      "period": "Mars 2026 – Juin 2026 · 4 mois",
+      "desc": "Conception et déploiement d'un Warehouse Management System (WMS) pour optimiser la gestion des stocks et fluidifier les flux logistiques. Analyse des processus existants, identification des goulots d'étranglement (suivi manuel, incohérences de données, retards d'information) et déploiement d'une solution digitale centralisée.",
+      "impact": "Gain d'efficacité opérationnelle estimé à +30% · Impact 240 000 MAD/an",
+      "image": "pfe_defense.jpg"
+    },
+    {
+      "role": "Stagiaire (PFA) – Full Stack Web Developer @ CAPN",
+      "org": "ESITH Digital Center",
+      "period": "Juillet 2025 · 1 mois",
+      "desc": "Développement d'outils web pour la digitalisation des processus internes. Conception d'APIs RESTful robustes avec la stack MERN (MongoDB, Express.js, React.js, Node.js).",
+      "impact": "",
+      "image": ""
+    },
+    {
+      "role": "Bug Bounty Hunter",
+      "org": "HackerOne · Temps partiel · À distance",
+      "period": "Décembre 2024 – Juillet 2025 · 8 mois",
+      "desc": "Recherche active de vulnérabilités de sécurité sur des applications web, APIs et infrastructures pour aider les organisations à sécuriser leurs actifs numériques.",
+      "impact": "",
+      "image": ""
+    },
+    {
+      "role": "Internship Trainee",
+      "org": "Stellantis · Kénitra, Maroc",
+      "period": "Juin 2024 · 1 mois",
+      "desc": "Optimisation des processus de contrôle des pièces pour le département EUP. Analyse des causes racines (Ishikawa, 5 Whys), conception de workflows Lean Manufacturing et proposition de KPIs/dashboards.",
+      "impact": "",
+      "image": ""
+    }
+  ],
+  "education": [
+    {
+      "school": "ESITH Casablanca",
+      "degree": "Ingénieur d'État en Génie Industriel",
+      "period": "2023 – 2026",
+      "desc": "Spécialisation Production Management & Optimization · Lean, Six Sigma, technologies digitales, modèles d'optimisation, simulation et IA appliqués à l'Industrie 4.0.",
+      "image": "esith_logo.png"
+    },
+    {
+      "school": "CPGE – Classes préparatoires aux grandes écoles",
+      "degree": "Physique, Math et Sciences de l'Ingénieur (PCSI / PSI)",
+      "period": "Déc. 2021 – Févr. 2023",
+      "desc": "Lycée Prince Héritier Moulay El Hassan, Ouarzazate.",
+      "image": ""
+    }
+  ],
+  "projects": [
+    {
+      "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
+      "category": "Cybersécurité / Industrie 4.0",
+      "meta": "Équipe Secure Prod (avec Kaouthar Belkebir) · Teal Technology Services · Jul. 2025",
+      "result": "1st Place",
+      "prize": "30 000 DHS",
+      "abstract": "Les réseaux SCADA/ICS ont vu une hausse documentée de 54% des attaques ciblées, tout en reposant sur des protocoles historiques (Modbus TCP, DNP3) sans authentification ni chiffrement natifs. SecureProd combine un parsing conscient des protocoles avec un modèle de détection d'anomalies supervisé pour signaler en temps réel les comportements OT anormaux, et restitue le risque sous forme de carte de menace 3D pour les opérateurs d'usine. Conçu et livré en 36 heures de hackathon.",
+      "specs_text": "Protocoles sécurisés: Modbus TCP, DNP3\nMéthode de détection: Modèle supervisé de détection d'anomalies\nMode de déploiement: Tap réseau passif (non-intrusif)\nVisualisation: Carte de menace 3D en temps réel\nReporting: Export automatisé prêt pour audit de conformité\nFenêtre de développement: 36 heures (format hackathon)",
+      "images": "secureprod_logo.png, secureprod_photo.png"
+    },
+    {
+      "title": "NEURO FIT — Gamified EMG Biofeedback for Muscular Rehabilitation",
+      "category": "Santé Digitale / Gamification",
+      "meta": "Équipe ESITH — Reda et al. · Game4Health, ISMAGI Rabat × SmartTech Lab · 4 avr. 2026",
+      "result": "2nd Place",
+      "prize": "6 000 DHS",
+      "abstract": "L'adhérence aux protocoles de rééducation musculaire est limitée par le manque de retour immédiat des exercices classiques de physiothérapie. NEURO FIT capte le signal EMG de surface (sEMG) via électrodes à l'avant-bras et transforme l'activation musculaire en gameplay temps réel autour de trois objectifs — Follow, Avoid, Maintain. Lors d'une démonstration live, le système a atteint une précision de 93% avec un taux de fatigue détecté de 0% et un rapport de session généré automatiquement pour le suivi clinique à distance.",
+      "specs_text": "Source du signal: EMG de surface, électrodes 2 canaux à l'avant-bras\nMétriques live: Score de précision, fatigue musculaire, charge du modèle ML\nSortie observée (démo): Amplitude temps réel 354 μV, précision 93%, fatigue 0%\nModes de jeu: Follow, Avoid, Maintain\nReporting: Rapport de session automatisé pour suivi clinicien",
+      "images": "neurofit_dashboard.png, neurofit_electrodes.png, neurofit_presenting.png, neurofit_award.png"
+    },
+    {
+      "title": "Vamosway — Full-Stack Mobility & Travel Web Application",
+      "category": "Web Application / Mobilité",
+      "meta": "Équipe Vamosway · ACCEDE Internationale · Track Sciences et Technologie",
+      "result": "1st Place",
+      "prize": "10 000 DHS",
+      "abstract": "Application web full-stack conçue et livrée dans la fenêtre fixe d'un hackathon pour répondre à un enjeu de mobilité du track « Sciences et Technologie ». Priorité donnée à un parcours utilisateur cohérent et fonctionnel plutôt qu'à une exhaustivité des fonctionnalités — cadrage du problème, conception de l'interface, implémentation et pitch live devant le jury.",
+      "specs_text": "Livrable: Application web full-stack\nFormat d'équipe: Équipe pluridisciplinaire étudiante\nCritères d'évaluation: Innovation, utilisabilité, exécution technique\nFenêtre de développement: Format hackathon (budget temps fixe)",
+      "images": ""
+    },
+    {
+      "title": "AI for Social Impact — Applied Machine Learning Prototype",
+      "category": "Intelligence Artificielle Appliquée",
+      "meta": "Équipe ESITH — Reda Ouzidane · Hackathon ESITH Casablanca · Track AI for Social Impact",
+      "result": "2nd Place",
+      "prize": "",
+      "abstract": "Prototype IA fonctionnel développé pour répondre à un besoin social réel plutôt qu'à une simple preuve de concept sur données synthétiques, dans le cadre du track « AI for Social Impact » de l'ESITH Casablanca. Évalué sur la pertinence par rapport au besoin social, la faisabilité technique et la qualité d'exécution.",
+      "specs_text": "Livrable: Prototype IA fonctionnel\nCritères d'évaluation: Pertinence, faisabilité, exécution technique\nInstitution hôte: ESITH Casablanca",
+      "images": ""
+    },
+    {
+      "title": "Le Phare de l'Entrepreneuriat — Social-Impact Venture Award",
+      "category": "Entrepreneuriat Social",
+      "meta": "Reda Ouzidane · KEDGE Business School · 15 mai 2025",
+      "result": "Prix Impact Positif & Social",
+      "prize": "10 000 DHS",
+      "abstract": "Compétition d'entrepreneuriat de KEDGE Business School évaluant les ventures candidates sur deux axes combinés : viabilité entrepreneuriale et impact social positif démontrable. La venture a été reconnue pour sa capacité à combiner innovation et création de valeur sociale mesurable, avec un pitch live à Casablanca.",
+      "specs_text": "Prix: Prix Impact Positif & Social\nInstitution hôte: KEDGE Business School\nLieu: Casablanca, Maroc",
+      "images": "le_phare_photo.png"
+    },
+    {
+      "title": "Industry 4.0, AI & Cybersecurity for Smart Manufacturing",
+      "category": "Industrie 4.0 / Smart Manufacturing",
+      "meta": "Ouzidane R., Baroudi M., Fahsi Y. · ESITH, Maroc · IEEE ICCITX.0 2026, Paris",
+      "result": "Top 10 Finalist",
+      "prize": "77 projets · 5 pays",
+      "abstract": "Projet de recherche et d'innovation à l'intersection de l'Industrie 4.0, de l'IA, de la cybersécurité et du smart manufacturing, soumis au concours d'innovation CITx.C 2026. Sélectionné Top 10 Finaliste parmi 77 projets évalués sur 3 phases, annoncé lors de la session de clôture de la conférence internationale IEEE ICCITX.0 2026 à Paris, cérémonie de remise des prix le 16 juin 2026.",
+      "specs_text": "Soumissions évaluées: 77 projets, 5 pays\nRésultat: Top 10 Finalist\nDomaine: Industrie 4.0, IA, cybersécurité, smart manufacturing\nConférence: IEEE ICCITX.0 2026, Paris, France\nOrganisations partenaires: Fondation UTT, Chaire Connected Innovation",
+      "images": "ieee_finalist_screenshot.png"
+    },
+    {
+      "title": "Red Team Practitioner — Offensive Security Track",
+      "category": "Sécurité Offensive",
+      "meta": "TryHackMe · Profil : tryhackme.com/p/OUZIDANEREDA",
+      "result": "Top 5%",
+      "prize": "",
+      "abstract": "Parcours pratique de sécurité offensive développé via des labs hands-on couvrant l'ensemble du cycle de vie d'un adversaire — de la reconnaissance initiale au reporting post-exploitation. Classement dans le top 5% des utilisateurs de la plateforme, avec compétences démontrées en simulation d'adversaire, développement d'exploits, analyse réseau et reporting technique.",
+      "specs_text": "Adversary simulation: Reproduction de techniques d'attaquants réels\nPenetration testing: Identification et exploitation de vulnérabilités\nExploit development: Développement d'outils de compromission\nNetwork analysis: Étude du trafic pour identifier des enjeux de sécurité\nRisk & reporting: Évaluation des risques et documentation claire",
+      "images": ""
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Six Sigma Green Belt",
+      "issuer": "Coursera"
+    },
+    {
+      "name": "Google Data Analytics",
+      "issuer": "Google"
+    },
+    {
+      "name": "Data Science",
+      "issuer": "DataCamp"
+    },
+    {
+      "name": "Google Project Management",
+      "issuer": "Google"
+    },
+    {
+      "name": "Data Science",
+      "issuer": "IBM"
+    },
+    {
+      "name": "API Penetration Testing",
+      "issuer": "APIsec University"
+    },
+    {
+      "name": "CS50x",
+      "issuer": "Harvard University"
+    },
+    {
+      "name": "Windows Privilege Escalation",
+      "issuer": "Hack The Box"
+    },
+    {
+      "name": "Attacking Common Applications",
+      "issuer": "Hack The Box"
+    },
+    {
+      "name": "AD Enumeration & Attacks",
+      "issuer": "Hack The Box"
+    },
+    {
+      "name": "Web-Attacks",
+      "issuer": "Hack The Box"
+    },
+    {
+      "name": "Fortinet Certified Associate Cybersecurity",
+      "issuer": "Fortinet"
+    },
+    {
+      "name": "Ethical Hacking Essentials (EHE)",
+      "issuer": "EC-Council"
+    },
+    {
+      "name": "Jr Penetration Tester",
+      "issuer": "TryHackMe"
+    },
+    {
+      "name": "Offensive Pentesting",
+      "issuer": "TryHackMe"
+    },
+    {
+      "name": "Red-Team (Top 5%)",
+      "issuer": "TryHackMe"
+    },
+    {
+      "name": "Junior Cybersecurity Analyst Career Path",
+      "issuer": "Cisco"
+    },
+    {
+      "name": "Ethical Hacker",
+      "issuer": "Cisco"
+    }
+  ]
+}

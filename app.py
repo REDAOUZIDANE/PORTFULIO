@@ -1,4 +1,7 @@
+import json
 import os
+
+import pandas as pd
 import streamlit as st
 
 # ---------------------------------------------------------------------------
@@ -14,23 +17,290 @@ st.set_page_config(
 IMG_DIR = "images"
 UPLOAD_DIR = os.path.join(IMG_DIR, "uploads")
 CV_PATH = os.path.join("documents", "CV_Ouzidane_Reda.pdf")
+CONTENT_PATH = "content.json"
+
+# ---------------------------------------------------------------------------
+# Default content (seeds content.json on first run)
+# ---------------------------------------------------------------------------
+DEFAULT_CONTENT = {
+    "tagline": "Ingénieur passionné par la cybersécurité offensive et l'optimisation des systèmes industriels.",
+    "skills": [
+        "Penetration Testing", "Red Teaming", "Web Exploitation (XSS, SQLi, IDOR, SSRF)",
+        "JWT / Auth Attacks", "Active Directory Attacks", "Reverse Engineering",
+        "Warehouse Management Systems (WMS)", "Lean Six Sigma", "Industry 4.0",
+        "Data Analytics", "Machine Learning", "MERN Stack (MongoDB, Express, React, Node)",
+        "Process Optimization", "Supply Chain & Logistique",
+    ],
+    "badges": ["Génie Industriel", "Cybersécurité", "IA Appliquée", "Supply Chain", "Industrie 4.0"],
+    "contact": {
+        "linkedin": "https://www.linkedin.com/in/ouzidane-reda-a9b010295",
+        "email": "redaouzidan@gmail.com",
+        "phone": "",
+        "location": "Casablanca-Settat, Maroc",
+    },
+    "stats": [
+        {"num": "7", "label": "Projets & hackathons"},
+        {"num": "18", "label": "Certifications"},
+        {"num": "2 968", "label": "Abonnés LinkedIn"},
+        {"num": "500+", "label": "Relations"},
+        {"num": "5", "label": "Pays au concours IEEE"},
+    ],
+    "experience": [
+        {
+            "role": "PFE Intern – Industry 4.0 & Digitalization Consultant",
+            "org": "DOUNITEX Confection SA",
+            "period": "Mars 2026 – Juin 2026 · 4 mois",
+            "desc": "Conception et déploiement d'un Warehouse Management System (WMS) pour optimiser la gestion "
+            "des stocks et fluidifier les flux logistiques. Analyse des processus existants, identification des "
+            "goulots d'étranglement (suivi manuel, incohérences de données, retards d'information) et "
+            "déploiement d'une solution digitale centralisée.",
+            "impact": "Gain d'efficacité opérationnelle estimé à +30% · Impact 240 000 MAD/an",
+            "image": "pfe_defense.jpg",
+        },
+        {
+            "role": "Stagiaire (PFA) – Full Stack Web Developer @ CAPN",
+            "org": "ESITH Digital Center",
+            "period": "Juillet 2025 · 1 mois",
+            "desc": "Développement d'outils web pour la digitalisation des processus internes. Conception d'APIs "
+            "RESTful robustes avec la stack MERN (MongoDB, Express.js, React.js, Node.js).",
+            "impact": "",
+            "image": "",
+        },
+        {
+            "role": "Bug Bounty Hunter",
+            "org": "HackerOne · Temps partiel · À distance",
+            "period": "Décembre 2024 – Juillet 2025 · 8 mois",
+            "desc": "Recherche active de vulnérabilités de sécurité sur des applications web, APIs et "
+            "infrastructures pour aider les organisations à sécuriser leurs actifs numériques.",
+            "impact": "",
+            "image": "",
+        },
+        {
+            "role": "Internship Trainee",
+            "org": "Stellantis · Kénitra, Maroc",
+            "period": "Juin 2024 · 1 mois",
+            "desc": "Optimisation des processus de contrôle des pièces pour le département EUP. Analyse des "
+            "causes racines (Ishikawa, 5 Whys), conception de workflows Lean Manufacturing et proposition de "
+            "KPIs/dashboards.",
+            "impact": "",
+            "image": "",
+        },
+    ],
+    "education": [
+        {
+            "school": "ESITH Casablanca",
+            "degree": "Ingénieur d'État en Génie Industriel",
+            "period": "2023 – 2026",
+            "desc": "Spécialisation Production Management & Optimization · Lean, Six Sigma, technologies "
+            "digitales, modèles d'optimisation, simulation et IA appliqués à l'Industrie 4.0.",
+            "image": "esith_logo.png",
+        },
+        {
+            "school": "CPGE – Classes préparatoires aux grandes écoles",
+            "degree": "Physique, Math et Sciences de l'Ingénieur (PCSI / PSI)",
+            "period": "Déc. 2021 – Févr. 2023",
+            "desc": "Lycée Prince Héritier Moulay El Hassan, Ouarzazate.",
+            "image": "",
+        },
+    ],
+    "projects": [
+        {
+            "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
+            "category": "Cybersécurité / Industrie 4.0",
+            "meta": "Équipe Secure Prod (avec Kaouthar Belkebir) · Teal Technology Services · Jul. 2025",
+            "result": "1st Place",
+            "prize": "30 000 DHS",
+            "abstract": "Les réseaux SCADA/ICS ont vu une hausse documentée de 54% des attaques ciblées, tout en "
+            "reposant sur des protocoles historiques (Modbus TCP, DNP3) sans authentification ni chiffrement "
+            "natifs. SecureProd combine un parsing conscient des protocoles avec un modèle de détection "
+            "d'anomalies supervisé pour signaler en temps réel les comportements OT anormaux, et restitue le "
+            "risque sous forme de carte de menace 3D pour les opérateurs d'usine. Conçu et livré en 36 heures "
+            "de hackathon.",
+            "specs_text": "Protocoles sécurisés: Modbus TCP, DNP3\n"
+            "Méthode de détection: Modèle supervisé de détection d'anomalies\n"
+            "Mode de déploiement: Tap réseau passif (non-intrusif)\n"
+            "Visualisation: Carte de menace 3D en temps réel\n"
+            "Reporting: Export automatisé prêt pour audit de conformité\n"
+            "Fenêtre de développement: 36 heures (format hackathon)",
+            "images": "secureprod_logo.png, secureprod_photo.png",
+        },
+        {
+            "title": "NEURO FIT — Gamified EMG Biofeedback for Muscular Rehabilitation",
+            "category": "Santé Digitale / Gamification",
+            "meta": "Équipe ESITH — Reda et al. · Game4Health, ISMAGI Rabat × SmartTech Lab · 4 avr. 2026",
+            "result": "2nd Place",
+            "prize": "6 000 DHS",
+            "abstract": "L'adhérence aux protocoles de rééducation musculaire est limitée par le manque de retour "
+            "immédiat des exercices classiques de physiothérapie. NEURO FIT capte le signal EMG de surface "
+            "(sEMG) via électrodes à l'avant-bras et transforme l'activation musculaire en gameplay temps réel "
+            "autour de trois objectifs — Follow, Avoid, Maintain. Lors d'une démonstration live, le système a "
+            "atteint une précision de 93% avec un taux de fatigue détecté de 0% et un rapport de session "
+            "généré automatiquement pour le suivi clinique à distance.",
+            "specs_text": "Source du signal: EMG de surface, électrodes 2 canaux à l'avant-bras\n"
+            "Métriques live: Score de précision, fatigue musculaire, charge du modèle ML\n"
+            "Sortie observée (démo): Amplitude temps réel 354 μV, précision 93%, fatigue 0%\n"
+            "Modes de jeu: Follow, Avoid, Maintain\n"
+            "Reporting: Rapport de session automatisé pour suivi clinicien",
+            "images": "neurofit_dashboard.png, neurofit_electrodes.png, neurofit_presenting.png, neurofit_award.png",
+        },
+        {
+            "title": "Vamosway — Full-Stack Mobility & Travel Web Application",
+            "category": "Web Application / Mobilité",
+            "meta": "Équipe Vamosway · ACCEDE Internationale · Track Sciences et Technologie",
+            "result": "1st Place",
+            "prize": "10 000 DHS",
+            "abstract": "Application web full-stack conçue et livrée dans la fenêtre fixe d'un hackathon pour "
+            "répondre à un enjeu de mobilité du track « Sciences et Technologie ». Priorité donnée à un "
+            "parcours utilisateur cohérent et fonctionnel plutôt qu'à une exhaustivité des fonctionnalités — "
+            "cadrage du problème, conception de l'interface, implémentation et pitch live devant le jury.",
+            "specs_text": "Livrable: Application web full-stack\n"
+            "Format d'équipe: Équipe pluridisciplinaire étudiante\n"
+            "Critères d'évaluation: Innovation, utilisabilité, exécution technique\n"
+            "Fenêtre de développement: Format hackathon (budget temps fixe)",
+            "images": "",
+        },
+        {
+            "title": "AI for Social Impact — Applied Machine Learning Prototype",
+            "category": "Intelligence Artificielle Appliquée",
+            "meta": "Équipe ESITH — Reda Ouzidane · Hackathon ESITH Casablanca · Track AI for Social Impact",
+            "result": "2nd Place",
+            "prize": "",
+            "abstract": "Prototype IA fonctionnel développé pour répondre à un besoin social réel plutôt qu'à une "
+            "simple preuve de concept sur données synthétiques, dans le cadre du track « AI for Social Impact » "
+            "de l'ESITH Casablanca. Évalué sur la pertinence par rapport au besoin social, la faisabilité "
+            "technique et la qualité d'exécution.",
+            "specs_text": "Livrable: Prototype IA fonctionnel\n"
+            "Critères d'évaluation: Pertinence, faisabilité, exécution technique\n"
+            "Institution hôte: ESITH Casablanca",
+            "images": "",
+        },
+        {
+            "title": "Le Phare de l'Entrepreneuriat — Social-Impact Venture Award",
+            "category": "Entrepreneuriat Social",
+            "meta": "Reda Ouzidane · KEDGE Business School · 15 mai 2025",
+            "result": "Prix Impact Positif & Social",
+            "prize": "10 000 DHS",
+            "abstract": "Compétition d'entrepreneuriat de KEDGE Business School évaluant les ventures candidates "
+            "sur deux axes combinés : viabilité entrepreneuriale et impact social positif démontrable. La "
+            "venture a été reconnue pour sa capacité à combiner innovation et création de valeur sociale "
+            "mesurable, avec un pitch live à Casablanca.",
+            "specs_text": "Prix: Prix Impact Positif & Social\n"
+            "Institution hôte: KEDGE Business School\n"
+            "Lieu: Casablanca, Maroc",
+            "images": "le_phare_photo.png",
+        },
+        {
+            "title": "Industry 4.0, AI & Cybersecurity for Smart Manufacturing",
+            "category": "Industrie 4.0 / Smart Manufacturing",
+            "meta": "Ouzidane R., Baroudi M., Fahsi Y. · ESITH, Maroc · IEEE ICCITX.0 2026, Paris",
+            "result": "Top 10 Finalist",
+            "prize": "77 projets · 5 pays",
+            "abstract": "Projet de recherche et d'innovation à l'intersection de l'Industrie 4.0, de l'IA, de la "
+            "cybersécurité et du smart manufacturing, soumis au concours d'innovation CITx.C 2026. Sélectionné "
+            "Top 10 Finaliste parmi 77 projets évalués sur 3 phases, annoncé lors de la session de clôture de "
+            "la conférence internationale IEEE ICCITX.0 2026 à Paris, cérémonie de remise des prix le 16 juin "
+            "2026.",
+            "specs_text": "Soumissions évaluées: 77 projets, 5 pays\n"
+            "Résultat: Top 10 Finalist\n"
+            "Domaine: Industrie 4.0, IA, cybersécurité, smart manufacturing\n"
+            "Conférence: IEEE ICCITX.0 2026, Paris, France\n"
+            "Organisations partenaires: Fondation UTT, Chaire Connected Innovation",
+            "images": "ieee_finalist_screenshot.png",
+        },
+        {
+            "title": "Red Team Practitioner — Offensive Security Track",
+            "category": "Sécurité Offensive",
+            "meta": "TryHackMe · Profil : tryhackme.com/p/OUZIDANEREDA",
+            "result": "Top 5%",
+            "prize": "",
+            "abstract": "Parcours pratique de sécurité offensive développé via des labs hands-on couvrant "
+            "l'ensemble du cycle de vie d'un adversaire — de la reconnaissance initiale au reporting "
+            "post-exploitation. Classement dans le top 5% des utilisateurs de la plateforme, avec compétences "
+            "démontrées en simulation d'adversaire, développement d'exploits, analyse réseau et reporting "
+            "technique.",
+            "specs_text": "Adversary simulation: Reproduction de techniques d'attaquants réels\n"
+            "Penetration testing: Identification et exploitation de vulnérabilités\n"
+            "Exploit development: Développement d'outils de compromission\n"
+            "Network analysis: Étude du trafic pour identifier des enjeux de sécurité\n"
+            "Risk & reporting: Évaluation des risques et documentation claire",
+            "images": "",
+        },
+    ],
+    "certifications": [
+        {"name": "Six Sigma Green Belt", "issuer": "Coursera"},
+        {"name": "Google Data Analytics", "issuer": "Google"},
+        {"name": "Data Science", "issuer": "DataCamp"},
+        {"name": "Google Project Management", "issuer": "Google"},
+        {"name": "Data Science", "issuer": "IBM"},
+        {"name": "API Penetration Testing", "issuer": "APIsec University"},
+        {"name": "CS50x", "issuer": "Harvard University"},
+        {"name": "Windows Privilege Escalation", "issuer": "Hack The Box"},
+        {"name": "Attacking Common Applications", "issuer": "Hack The Box"},
+        {"name": "AD Enumeration & Attacks", "issuer": "Hack The Box"},
+        {"name": "Web-Attacks", "issuer": "Hack The Box"},
+        {"name": "Fortinet Certified Associate Cybersecurity", "issuer": "Fortinet"},
+        {"name": "Ethical Hacking Essentials (EHE)", "issuer": "EC-Council"},
+        {"name": "Jr Penetration Tester", "issuer": "TryHackMe"},
+        {"name": "Offensive Pentesting", "issuer": "TryHackMe"},
+        {"name": "Red-Team (Top 5%)", "issuer": "TryHackMe"},
+        {"name": "Junior Cybersecurity Analyst Career Path", "issuer": "Cisco"},
+        {"name": "Ethical Hacker", "issuer": "Cisco"},
+    ],
+}
 
 
+def load_content() -> dict:
+    if os.path.exists(CONTENT_PATH):
+        try:
+            with open(CONTENT_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    save_content(DEFAULT_CONTENT)
+    return json.loads(json.dumps(DEFAULT_CONTENT))
+
+
+def save_content(data: dict):
+    with open(CONTENT_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def parse_specs(specs_text: str):
+    rows = []
+    for line in (specs_text or "").splitlines():
+        if ":" in line:
+            k, v = line.split(":", 1)
+            if k.strip():
+                rows.append((k.strip(), v.strip()))
+    return rows
+
+
+def parse_images(images_text: str):
+    return [x.strip() for x in (images_text or "").split(",") if x.strip()]
+
+
+content = load_content()
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 def img_path(filename: str) -> str | None:
-    path = os.path.join(IMG_DIR, filename)
-    return path if os.path.exists(path) else None
+    for base in (IMG_DIR, UPLOAD_DIR):
+        path = os.path.join(base, filename)
+        if os.path.exists(path):
+            return path
+    return None
 
 
 def safe_image(filename: str, caption: str = "", use_container_width: bool = True):
-    """Render an image if present, otherwise a placeholder box explaining what's missing."""
-    path = img_path(filename)
+    path = img_path(filename) if filename else None
     if path:
-        st.image(path, caption=caption, use_container_width=use_container_width)
+        st.image(path, caption=caption, width="stretch" if use_container_width else "content")
     else:
         st.markdown(
             f"""
             <div class="img-placeholder">
-                <span>Ajouter <code>images/{filename}</code></span>
+                <span>Ajouter <code>images/{filename or '...'}</code></span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -52,13 +322,13 @@ def cv_download_button(key: str):
                 f,
                 file_name="CV_Ouzidane_Reda.pdf",
                 mime="application/pdf",
-                use_container_width=True,
+                width="stretch",
                 key=key,
             )
 
 
 # ---------------------------------------------------------------------------
-# Styling
+# Styling — professional theme with subtle motion
 # ---------------------------------------------------------------------------
 st.markdown(
     """
@@ -84,13 +354,30 @@ st.markdown(
         letter-spacing: -0.01em;
     }
 
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseDot {
+        0% { box-shadow: 0 0 0 0 rgba(76,175,125,0.55); }
+        70% { box-shadow: 0 0 0 7px rgba(76,175,125,0); }
+        100% { box-shadow: 0 0 0 0 rgba(76,175,125,0); }
+    }
+    @keyframes shimmer {
+        0% { background-position: -400px 0; }
+        100% { background-position: 400px 0; }
+    }
+
     .hero-card {
         background: #151920;
         border: 1px solid #262c38;
         border-left: 3px solid #6f93b8;
         border-radius: 6px;
         padding: 2.2rem 2.4rem;
+        animation: fadeInUp 0.55s ease both;
+        transition: border-left-color 0.4s ease;
     }
+    .hero-card:hover { border-left-color: #c9a15a; }
 
     .status-dot {
         display: inline-block;
@@ -99,6 +386,7 @@ st.markdown(
         border-radius: 50%;
         background: #4caf7d;
         margin-right: 0.5rem;
+        animation: pulseDot 2.2s infinite;
     }
 
     .badge {
@@ -112,6 +400,12 @@ st.markdown(
         font-size: 0.8rem;
         font-weight: 500;
         letter-spacing: 0.01em;
+        transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .badge:hover {
+        transform: translateY(-2px);
+        border-color: #6f93b8;
+        color: #eef1f4;
     }
 
     .card {
@@ -120,8 +414,14 @@ st.markdown(
         border-radius: 6px;
         padding: 1.5rem 1.7rem;
         margin-bottom: 1.2rem;
+        animation: fadeInUp 0.5s ease both;
+        transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .card:hover { border-color: #3a4250; }
+    .card:hover {
+        border-color: #3a4250;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
 
     .card h4 { margin-bottom: 0.2rem !important; font-size: 1.15rem !important; }
     .card .meta { color: #838d99; font-size: 0.85rem; margin-bottom: 0.5rem; }
@@ -147,7 +447,10 @@ st.markdown(
         padding: 0.75rem 1rem;
         margin-bottom: 0.6rem;
         font-size: 0.87rem;
+        animation: fadeInUp 0.5s ease both;
+        transition: border-color 0.2s ease, transform 0.2s ease;
     }
+    .cert-chip:hover { border-color: #6f93b8; transform: translateX(3px); }
     .cert-chip b { color: #e6e9ee; }
     .cert-chip span { color: #838d99; font-size: 0.78rem; }
 
@@ -171,7 +474,10 @@ st.markdown(
         border-radius: 6px;
         background: #151920;
         border: 1px solid #232833;
+        animation: fadeInUp 0.6s ease both;
+        transition: transform 0.25s ease, border-color 0.25s ease;
     }
+    .stat-box:hover { transform: translateY(-3px); border-color: #6f93b8; }
     .stat-box .num {
         font-family: 'Source Serif 4', serif;
         font-size: 1.7rem;
@@ -186,256 +492,30 @@ st.markdown(
         margin-top: 0.2rem;
     }
 
-    a { color: #8fb2d6 !important; text-decoration: none !important; }
-    a:hover { text-decoration: underline !important; }
+    a { color: #8fb2d6 !important; text-decoration: none !important; transition: color 0.2s ease; }
+    a:hover { text-decoration: underline !important; color: #c9a15a !important; }
 
     hr { border-color: #232833; }
 
     table td { border-bottom: 1px solid #1e232c; }
+
+    .stButton > button {
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .stButton > button:hover { transform: translateY(-1px); }
+
+    img { transition: transform 0.3s ease, filter 0.3s ease; }
+    div[data-testid="stImage"]:hover img { transform: scale(1.015); }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------------------------------
-# Data
-# ---------------------------------------------------------------------------
-EXPERIENCE = [
-    {
-        "role": "PFE Intern – Industry 4.0 & Digitalization Consultant",
-        "org": "DOUNITEX Confection SA",
-        "period": "Mars 2026 – Juin 2026 · 4 mois",
-        "desc": "Conception et déploiement d'un Warehouse Management System (WMS) pour optimiser la gestion "
-        "des stocks et fluidifier les flux logistiques. Analyse des processus existants, identification des "
-        "goulots d'étranglement (suivi manuel, incohérences de données, retards d'information) et déploiement "
-        "d'une solution digitale centralisée.",
-        "impact": "Gain d'efficacité opérationnelle estimé à +30% · Impact 240 000 MAD/an",
-        "image": "pfe_defense.jpg",
-    },
-    {
-        "role": "Stagiaire (PFA) – Full Stack Web Developer @ CAPN",
-        "org": "ESITH Digital Center",
-        "period": "Juillet 2025 · 1 mois",
-        "desc": "Développement d'outils web pour la digitalisation des processus internes. Conception d'APIs "
-        "RESTful robustes avec la stack MERN (MongoDB, Express.js, React.js, Node.js).",
-        "impact": None,
-        "image": None,
-    },
-    {
-        "role": "Bug Bounty Hunter",
-        "org": "HackerOne · Temps partiel · À distance",
-        "period": "Décembre 2024 – Juillet 2025 · 8 mois",
-        "desc": "Recherche active de vulnérabilités de sécurité sur des applications web, APIs et infrastructures "
-        "pour aider les organisations à sécuriser leurs actifs numériques.",
-        "impact": None,
-        "image": None,
-    },
-    {
-        "role": "Internship Trainee",
-        "org": "Stellantis · Kénitra, Maroc",
-        "period": "Juin 2024 · 1 mois",
-        "desc": "Optimisation des processus de contrôle des pièces pour le département EUP. Analyse des causes "
-        "racines (Ishikawa, 5 Whys), conception de workflows Lean Manufacturing et proposition de KPIs/dashboards.",
-        "impact": None,
-        "image": None,
-    },
-]
-
-EDUCATION = [
-    {
-        "school": "ESITH Casablanca",
-        "degree": "Ingénieur d'État en Génie Industriel",
-        "period": "2023 – 2026",
-        "desc": "Spécialisation Production Management & Optimization · Lean, Six Sigma, technologies digitales, "
-        "modèles d'optimisation, simulation et IA appliqués à l'Industrie 4.0.",
-        "image": "esith_logo.png",
-    },
-    {
-        "school": "CPGE – Classes préparatoires aux grandes écoles",
-        "degree": "Physique, Math et Sciences de l'Ingénieur (PCSI / PSI)",
-        "period": "Déc. 2021 – Févr. 2023",
-        "desc": "Lycée Prince Héritier Moulay El Hassan, Ouarzazate.",
-        "image": None,
-    },
-]
-
-PROJECTS = [
-    {
-        "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
-        "category": "Cybersécurité / Industrie 4.0",
-        "meta": "Équipe Secure Prod (avec Kaouthar Belkebir) · Teal Technology Services · Jul. 2025",
-        "result": "1st Place",
-        "prize": "30 000 DHS",
-        "abstract": "Les réseaux SCADA/ICS ont vu une hausse documentée de 54% des attaques ciblées, tout en "
-        "reposant sur des protocoles historiques (Modbus TCP, DNP3) sans authentification ni chiffrement natifs. "
-        "SecureProd combine un parsing conscient des protocoles avec un modèle de détection d'anomalies "
-        "supervisé pour signaler en temps réel les comportements OT anormaux, et restitue le risque sous forme "
-        "de carte de menace 3D pour les opérateurs d'usine. Conçu et livré en 36 heures de hackathon.",
-        "specs": [
-            ("Protocoles sécurisés", "Modbus TCP, DNP3"),
-            ("Méthode de détection", "Modèle supervisé de détection d'anomalies"),
-            ("Mode de déploiement", "Tap réseau passif (non-intrusif)"),
-            ("Visualisation", "Carte de menace 3D en temps réel"),
-            ("Reporting", "Export automatisé prêt pour audit de conformité"),
-            ("Fenêtre de développement", "36 heures (format hackathon)"),
-        ],
-        "images": ["secureprod_logo.png", "secureprod_photo.png"],
-    },
-    {
-        "title": "NEURO FIT — Gamified EMG Biofeedback for Muscular Rehabilitation",
-        "category": "Santé Digitale / Gamification",
-        "meta": "Équipe ESITH — Reda et al. · Game4Health, ISMAGI Rabat × SmartTech Lab · 4 avr. 2026",
-        "result": "2nd Place",
-        "prize": "6 000 DHS",
-        "abstract": "L'adhérence aux protocoles de rééducation musculaire est limitée par le manque de retour "
-        "immédiat des exercices classiques de physiothérapie. NEURO FIT capte le signal EMG de surface (sEMG) "
-        "via électrodes à l'avant-bras et transforme l'activation musculaire en gameplay temps réel autour de "
-        "trois objectifs — Follow, Avoid, Maintain. Lors d'une démonstration live, le système a atteint une "
-        "précision de 93% avec un taux de fatigue détecté de 0% et un rapport de session généré automatiquement "
-        "pour le suivi clinique à distance.",
-        "specs": [
-            ("Source du signal", "EMG de surface, électrodes 2 canaux à l'avant-bras"),
-            ("Métriques live", "Score de précision, fatigue musculaire, charge du modèle ML"),
-            ("Sortie observée (démo)", "Amplitude temps réel 354 μV, précision 93%, fatigue 0%"),
-            ("Modes de jeu", "Follow, Avoid, Maintain"),
-            ("Reporting", "Rapport de session automatisé pour suivi clinicien"),
-        ],
-        "images": ["neurofit_dashboard.png", "neurofit_electrodes.png", "neurofit_presenting.png", "neurofit_award.png"],
-    },
-    {
-        "title": "Vamosway — Full-Stack Mobility & Travel Web Application",
-        "category": "Web Application / Mobilité",
-        "meta": "Équipe Vamosway · ACCEDE Internationale · Track Sciences et Technologie",
-        "result": "1st Place",
-        "prize": "10 000 DHS",
-        "abstract": "Application web full-stack conçue et livrée dans la fenêtre fixe d'un hackathon pour "
-        "répondre à un enjeu de mobilité du track « Sciences et Technologie ». Priorité donnée à un parcours "
-        "utilisateur cohérent et fonctionnel plutôt qu'à une exhaustivité des fonctionnalités — cadrage du "
-        "problème, conception de l'interface, implémentation et pitch live devant le jury.",
-        "specs": [
-            ("Livrable", "Application web full-stack"),
-            ("Format d'équipe", "Équipe pluridisciplinaire étudiante"),
-            ("Critères d'évaluation", "Innovation, utilisabilité, exécution technique"),
-            ("Fenêtre de développement", "Format hackathon (budget temps fixe)"),
-        ],
-        "images": [],
-    },
-    {
-        "title": "AI for Social Impact — Applied Machine Learning Prototype",
-        "category": "Intelligence Artificielle Appliquée",
-        "meta": "Équipe ESITH — Reda Ouzidane · Hackathon ESITH Casablanca · Track AI for Social Impact",
-        "result": "2nd Place",
-        "prize": None,
-        "abstract": "Prototype IA fonctionnel développé pour répondre à un besoin social réel plutôt qu'à une "
-        "simple preuve de concept sur données synthétiques, dans le cadre du track « AI for Social Impact » "
-        "de l'ESITH Casablanca. Évalué sur la pertinence par rapport au besoin social, la faisabilité "
-        "technique et la qualité d'exécution.",
-        "specs": [
-            ("Livrable", "Prototype IA fonctionnel"),
-            ("Critères d'évaluation", "Pertinence, faisabilité, exécution technique"),
-            ("Institution hôte", "ESITH Casablanca"),
-        ],
-        "images": [],
-    },
-    {
-        "title": "Le Phare de l'Entrepreneuriat — Social-Impact Venture Award",
-        "category": "Entrepreneuriat Social",
-        "meta": "Reda Ouzidane · KEDGE Business School · 15 mai 2025",
-        "result": "Prix Impact Positif & Social",
-        "prize": "10 000 DHS",
-        "abstract": "Compétition d'entrepreneuriat de KEDGE Business School évaluant les ventures candidates sur "
-        "deux axes combinés : viabilité entrepreneuriale et impact social positif démontrable. La venture a été "
-        "reconnue pour sa capacité à combiner innovation et création de valeur sociale mesurable, avec un pitch "
-        "live à Casablanca.",
-        "specs": [
-            ("Prix", "Prix Impact Positif & Social"),
-            ("Institution hôte", "KEDGE Business School"),
-            ("Lieu", "Casablanca, Maroc"),
-        ],
-        "images": ["le_phare_photo.png"],
-    },
-    {
-        "title": "Industry 4.0, AI & Cybersecurity for Smart Manufacturing",
-        "category": "Industrie 4.0 / Smart Manufacturing",
-        "meta": "Ouzidane R., Baroudi M., Fahsi Y. · ESITH, Maroc · IEEE ICCITX.0 2026, Paris",
-        "result": "Top 10 Finalist",
-        "prize": "77 projets · 5 pays",
-        "abstract": "Projet de recherche et d'innovation à l'intersection de l'Industrie 4.0, de l'IA, de la "
-        "cybersécurité et du smart manufacturing, soumis au concours d'innovation CITx.C 2026. Sélectionné "
-        "Top 10 Finaliste parmi 77 projets évalués sur 3 phases, annoncé lors de la session de clôture de la "
-        "conférence internationale IEEE ICCITX.0 2026 à Paris, cérémonie de remise des prix le 16 juin 2026.",
-        "specs": [
-            ("Soumissions évaluées", "77 projets, 5 pays"),
-            ("Résultat", "Top 10 Finalist"),
-            ("Domaine", "Industrie 4.0, IA, cybersécurité, smart manufacturing"),
-            ("Conférence", "IEEE ICCITX.0 2026, Paris, France"),
-            ("Organisations partenaires", "Fondation UTT, Chaire Connected Innovation"),
-        ],
-        "images": ["ieee_finalist_screenshot.png"],
-    },
-    {
-        "title": "Red Team Practitioner — Offensive Security Track",
-        "category": "Sécurité Offensive",
-        "meta": "TryHackMe · Profil : tryhackme.com/p/OUZIDANEREDA",
-        "result": "Top 5%",
-        "prize": None,
-        "abstract": "Parcours pratique de sécurité offensive développé via des labs hands-on couvrant l'ensemble "
-        "du cycle de vie d'un adversaire — de la reconnaissance initiale au reporting post-exploitation. "
-        "Classement dans le top 5% des utilisateurs de la plateforme, avec compétences démontrées en "
-        "simulation d'adversaire, développement d'exploits, analyse réseau et reporting technique.",
-        "specs": [
-            ("Adversary simulation", "Reproduction de techniques d'attaquants réels"),
-            ("Penetration testing", "Identification et exploitation de vulnérabilités"),
-            ("Exploit development", "Développement d'outils de compromission"),
-            ("Network analysis", "Étude du trafic pour identifier des enjeux de sécurité"),
-            ("Risk & reporting", "Évaluation des risques et documentation claire"),
-        ],
-        "images": [],
-    },
-]
-
-CERTIFICATIONS = [
-    ("Six Sigma Green Belt", "Coursera"),
-    ("Google Data Analytics", "Google"),
-    ("Data Science", "DataCamp"),
-    ("Google Project Management", "Google"),
-    ("Data Science", "IBM"),
-    ("API Penetration Testing", "APIsec University"),
-    ("CS50x", "Harvard University"),
-    ("Windows Privilege Escalation", "Hack The Box"),
-    ("Attacking Common Applications", "Hack The Box"),
-    ("AD Enumeration & Attacks", "Hack The Box"),
-    ("Web-Attacks", "Hack The Box"),
-    ("Fortinet Certified Associate Cybersecurity", "Fortinet"),
-    ("Ethical Hacking Essentials (EHE)", "EC-Council"),
-    ("Jr Penetration Tester", "TryHackMe"),
-    ("Offensive Pentesting", "TryHackMe"),
-    ("Red-Team (Top 5%)", "TryHackMe"),
-    ("Junior Cybersecurity Analyst Career Path", "Cisco"),
-    ("Ethical Hacker", "Cisco"),
-]
-
-SKILLS = [
-    "Penetration Testing", "Red Teaming", "Web Exploitation (XSS, SQLi, IDOR, SSRF)",
-    "JWT / Auth Attacks", "Active Directory Attacks", "Reverse Engineering",
-    "Warehouse Management Systems (WMS)", "Lean Six Sigma", "Industry 4.0",
-    "Data Analytics", "Machine Learning", "MERN Stack (MongoDB, Express, React, Node)",
-    "Process Optimization", "Supply Chain & Logistique",
-]
-
-CONTACT = {
-    "linkedin": "https://www.linkedin.com/in/ouzidane-reda-a9b010295",
-    "email": "redaouzidan@gmail.com",
-    "phone": "",
-    "location": "Casablanca-Settat, Maroc",
-    "tagline": "Ingénieur passionné par la cybersécurité offensive et l'optimisation des systèmes industriels.",
-}
-
-# ---------------------------------------------------------------------------
 # Sidebar navigation
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    safe_image("profile_photo.jpg", use_container_width=True)
+    safe_image("profile_photo.jpg")
     st.markdown("### Ouzidane Reda")
     st.caption("Ingénieur d'État en Génie Industriel")
     st.markdown(
@@ -451,12 +531,13 @@ with st.sidebar:
     )
     st.markdown("---")
     cv_download_button(key="cv_sidebar")
-    st.markdown(f"[Profil LinkedIn]({CONTACT['linkedin']})")
-    st.caption(CONTACT["location"])
+    st.markdown(f"[Profil LinkedIn]({content['contact']['linkedin']})")
+    st.caption(content["contact"]["location"])
 
 # ---------------------------------------------------------------------------
 # Hero (always visible at top)
 # ---------------------------------------------------------------------------
+badges_html = "".join(f'<span class="badge">{b}</span>' for b in content["badges"])
 st.markdown(
     f"""
     <div class="hero-card">
@@ -464,14 +545,8 @@ st.markdown(
         <p style="font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem;">
             Ingénieur d'État en Génie Industriel · Cybersécurité & Industrie 4.0
         </p>
-        <p style="color:#9aa3af; margin-top:0.8rem; max-width:56rem;">{CONTACT['tagline']}</p>
-        <div style="margin-top:1rem;">
-            <span class="badge">Génie Industriel</span>
-            <span class="badge">Cybersécurité</span>
-            <span class="badge">IA Appliquée</span>
-            <span class="badge">Supply Chain</span>
-            <span class="badge">Industrie 4.0</span>
-        </div>
+        <p style="color:#9aa3af; margin-top:0.8rem; max-width:56rem;">{content['tagline']}</p>
+        <div style="margin-top:1rem;">{badges_html}</div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -479,18 +554,11 @@ st.markdown(
 
 st.write("")
 
-stat_cols = st.columns(5)
-stats = [
-    ("7", "Projets & hackathons"),
-    ("18", "Certifications"),
-    ("2 968", "Abonnés LinkedIn"),
-    ("500+", "Relations"),
-    ("5", "Pays au concours IEEE"),
-]
-for col, (num, lbl) in zip(stat_cols, stats):
+stat_cols = st.columns(len(content["stats"]))
+for col, s in zip(stat_cols, content["stats"]):
     with col:
         st.markdown(
-            f'<div class="stat-box"><div class="num">{num}</div><div class="lbl">{lbl}</div></div>',
+            f'<div class="stat-box"><div class="num">{s["num"]}</div><div class="lbl">{s["label"]}</div></div>',
             unsafe_allow_html=True,
         )
 
@@ -511,7 +579,7 @@ if section == "Accueil":
 
     st.subheader("Compétences")
     st.markdown(
-        "".join(f'<span class="badge">{s}</span>' for s in SKILLS),
+        "".join(f'<span class="badge">{s}</span>' for s in content["skills"]),
         unsafe_allow_html=True,
     )
 
@@ -533,9 +601,9 @@ if section == "Accueil":
 
 elif section == "Expérience":
     st.header("Expérience professionnelle")
-    for exp in EXPERIENCE:
+    for exp in content["experience"]:
         with st.container():
-            if exp["image"]:
+            if exp.get("image"):
                 c1, c2 = st.columns([1, 2.4])
                 with c1:
                     safe_image(exp["image"])
@@ -546,7 +614,7 @@ elif section == "Expérience":
                             <h4>{exp['role']}</h4>
                             <div class="meta">{exp['org']} · {exp['period']}</div>
                             <p>{exp['desc']}</p>
-                            {f'<div class="result">{exp["impact"]}</div>' if exp['impact'] else ''}
+                            {f'<div class="result">{exp["impact"]}</div>' if exp.get('impact') else ''}
                         </div>
                         """,
                         unsafe_allow_html=True,
@@ -558,7 +626,7 @@ elif section == "Expérience":
                         <h4>{exp['role']}</h4>
                         <div class="meta">{exp['org']} · {exp['period']}</div>
                         <p>{exp['desc']}</p>
-                        {f'<div class="result">{exp["impact"]}</div>' if exp['impact'] else ''}
+                        {f'<div class="result">{exp["impact"]}</div>' if exp.get('impact') else ''}
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -567,12 +635,12 @@ elif section == "Expérience":
 elif section == "Hackathons & Projets":
     st.header("Hackathons & Projets")
     st.caption("Fiches techniques de projets — cybersécurité, IA appliquée, santé digitale & entrepreneuriat social")
-    for p in PROJECTS:
-        prize_html = f" · <b>{p['prize']}</b>" if p["prize"] else ""
+    for p in content["projects"]:
+        prize_html = f" · <b>{p['prize']}</b>" if p.get("prize") else ""
         specs_rows = "".join(
             f"<tr><td style='padding:0.3rem 0.8rem 0.3rem 0; color:#838d99; white-space:nowrap;'>{k}</td>"
             f"<td style='padding:0.3rem 0; color:#d5dae0;'>{v}</td></tr>"
-            for k, v in p["specs"]
+            for k, v in parse_specs(p.get("specs_text", ""))
         )
         st.markdown(
             f"""
@@ -589,19 +657,20 @@ elif section == "Hackathons & Projets":
             """,
             unsafe_allow_html=True,
         )
-        if p["images"]:
-            img_cols = st.columns(len(p["images"]))
-            for col, img in zip(img_cols, p["images"]):
+        proj_images = parse_images(p.get("images", ""))
+        if proj_images:
+            img_cols = st.columns(len(proj_images))
+            for col, img in zip(img_cols, proj_images):
                 with col:
                     safe_image(img)
         st.write("")
 
 elif section == "Formation":
     st.header("Formation")
-    for edu in EDUCATION:
+    for edu in content["education"]:
         c1, c2 = st.columns([1, 2.4])
         with c1:
-            safe_image(edu["image"] or "school_placeholder.png")
+            safe_image(edu.get("image") or "school_placeholder.png")
         with c2:
             st.markdown(
                 f"""
@@ -615,15 +684,15 @@ elif section == "Formation":
             )
 
 elif section == "Certifications":
-    st.header("Certifications (18)")
+    st.header(f"Certifications ({len(content['certifications'])})")
     st.caption("Cybersécurité, Data & Management")
     cols = st.columns(3)
-    for i, (name, issuer) in enumerate(CERTIFICATIONS):
+    for i, c in enumerate(content["certifications"]):
         with cols[i % 3]:
             st.markdown(
                 f"""
                 <div class="cert-chip">
-                    <b>{name}</b><br/><span>{issuer}</span>
+                    <b>{c['name']}</b><br/><span>{c['issuer']}</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -636,7 +705,7 @@ elif section == "Certifications":
         gcols = st.columns(4)
         for i, fname in enumerate(image_files):
             with gcols[i % 4]:
-                st.image(os.path.join(UPLOAD_DIR, fname), caption=fname, use_container_width=True)
+                st.image(os.path.join(UPLOAD_DIR, fname), caption=fname, width="stretch")
 
 elif section == "Contact":
     st.header("Contact")
@@ -644,18 +713,18 @@ elif section == "Contact":
         "Ouvert aux opportunités en tant qu'Ingénieur Industriel, Ingénieur IA, Software Engineer ou "
         "Ingénieur Transformation Digitale."
     )
-    st.markdown(f"**LinkedIn** : [{CONTACT['linkedin']}]({CONTACT['linkedin']})")
-    st.markdown(f"**Email** : {CONTACT['email']}")
-    if CONTACT["phone"]:
-        st.markdown(f"**Téléphone** : {CONTACT['phone']}")
-    st.markdown(f"**Localisation** : {CONTACT['location']}")
+    st.markdown(f"**LinkedIn** : [{content['contact']['linkedin']}]({content['contact']['linkedin']})")
+    st.markdown(f"**Email** : {content['contact']['email']}")
+    if content["contact"].get("phone"):
+        st.markdown(f"**Téléphone** : {content['contact']['phone']}")
+    st.markdown(f"**Localisation** : {content['contact']['location']}")
     st.markdown("**Formation** : ESITH Casablanca")
     st.write("")
     cv_download_button(key="cv_contact")
 
 elif section == "Espace privé":
     st.header("Espace privé")
-    st.caption("Zone réservée — ajout de certificats, diplômes et photos supplémentaires.")
+    st.caption("Zone réservée — modification du contenu du site et ajout de fichiers.")
 
     if "admin_ok" not in st.session_state:
         st.session_state.admin_ok = False
@@ -670,37 +739,161 @@ elif section == "Espace privé":
                 st.error("Mot de passe incorrect.")
     else:
         st.success("Accès autorisé.")
-        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        tabs = st.tabs(["Général", "Expérience", "Formation", "Projets", "Certifications", "Fichiers"])
 
-        uploaded = st.file_uploader(
-            "Ajouter des fichiers (certificats, diplômes, photos)",
-            type=["png", "jpg", "jpeg", "pdf"],
-            accept_multiple_files=True,
-        )
-        if uploaded:
-            for f in uploaded:
-                dest = os.path.join(UPLOAD_DIR, f.name)
-                with open(dest, "wb") as out:
-                    out.write(f.getbuffer())
-            st.success(f"{len(uploaded)} fichier(s) ajouté(s).")
-            st.rerun()
+        # ---- Général --------------------------------------------------
+        with tabs[0]:
+            st.subheader("En-tête & contact")
+            tagline = st.text_area("Phrase d'accroche", value=content["tagline"], height=80)
+            skills_text = st.text_area(
+                "Compétences (une par ligne)", value="\n".join(content["skills"]), height=180
+            )
+            badges_text = st.text_area(
+                "Badges du header (un par ligne)", value="\n".join(content["badges"]), height=100
+            )
+            st.markdown("---")
+            linkedin = st.text_input("LinkedIn", value=content["contact"]["linkedin"])
+            email = st.text_input("Email", value=content["contact"]["email"])
+            phone = st.text_input("Téléphone", value=content["contact"].get("phone", ""))
+            location = st.text_input("Localisation", value=content["contact"]["location"])
+            if st.button("Enregistrer — Général", type="primary"):
+                content["tagline"] = tagline
+                content["skills"] = [s.strip() for s in skills_text.splitlines() if s.strip()]
+                content["badges"] = [b.strip() for b in badges_text.splitlines() if b.strip()]
+                content["contact"] = {
+                    "linkedin": linkedin, "email": email, "phone": phone, "location": location,
+                }
+                save_content(content)
+                st.success("Enregistré.")
+                st.rerun()
 
-        existing = sorted(os.listdir(UPLOAD_DIR)) if os.path.isdir(UPLOAD_DIR) else []
-        if existing:
-            st.subheader("Fichiers enregistrés")
-            gcols = st.columns(4)
-            for i, fname in enumerate(existing):
-                fpath = os.path.join(UPLOAD_DIR, fname)
-                with gcols[i % 4]:
-                    if fname.lower().endswith((".png", ".jpg", ".jpeg")):
-                        st.image(fpath, caption=fname, use_container_width=True)
-                    else:
-                        st.markdown(f"**{fname}**")
-                    if st.button("Supprimer", key=f"del_{fname}"):
-                        os.remove(fpath)
+        # ---- Expérience -------------------------------------------------
+        with tabs[1]:
+            st.subheader("Expérience professionnelle")
+            exp_df = pd.DataFrame(content["experience"])
+            edited_exp = st.data_editor(
+                exp_df,
+                num_rows="dynamic",
+                width="stretch",
+                key="editor_experience",
+                column_config={
+                    "desc": st.column_config.TextColumn("desc", width="large"),
+                    "image": st.column_config.TextColumn("image", help="nom de fichier dans images/"),
+                },
+            )
+            if st.button("Enregistrer — Expérience", type="primary"):
+                content["experience"] = edited_exp.fillna("").to_dict(orient="records")
+                save_content(content)
+                st.success("Enregistré.")
+                st.rerun()
+
+        # ---- Formation ----------------------------------------------------
+        with tabs[2]:
+            st.subheader("Formation")
+            edu_df = pd.DataFrame(content["education"])
+            edited_edu = st.data_editor(
+                edu_df,
+                num_rows="dynamic",
+                width="stretch",
+                key="editor_education",
+            )
+            if st.button("Enregistrer — Formation", type="primary"):
+                content["education"] = edited_edu.fillna("").to_dict(orient="records")
+                save_content(content)
+                st.success("Enregistré.")
+                st.rerun()
+
+        # ---- Projets --------------------------------------------------
+        with tabs[3]:
+            st.subheader("Hackathons & Projets")
+            projects = content["projects"]
+            for i, p in enumerate(projects):
+                with st.expander(p.get("title") or f"Projet {i+1}"):
+                    p["title"] = st.text_input("Titre", value=p.get("title", ""), key=f"pt_{i}")
+                    p["category"] = st.text_input("Catégorie", value=p.get("category", ""), key=f"pc_{i}")
+                    p["meta"] = st.text_input("Équipe / Événement / Date", value=p.get("meta", ""), key=f"pm_{i}")
+                    col_r, col_pr = st.columns(2)
+                    with col_r:
+                        p["result"] = st.text_input("Résultat", value=p.get("result", ""), key=f"pr_{i}")
+                    with col_pr:
+                        p["prize"] = st.text_input("Prix", value=p.get("prize", ""), key=f"pp_{i}")
+                    p["abstract"] = st.text_area("Résumé", value=p.get("abstract", ""), height=140, key=f"pa_{i}")
+                    p["specs_text"] = st.text_area(
+                        "Spécifications techniques (une ligne \"Clé: Valeur\" par ligne)",
+                        value=p.get("specs_text", ""), height=120, key=f"ps_{i}",
+                    )
+                    p["images"] = st.text_input(
+                        "Images (noms de fichiers séparés par des virgules)",
+                        value=p.get("images", ""), key=f"pi_{i}",
+                    )
+                    if st.button("Supprimer ce projet", key=f"pdel_{i}"):
+                        projects.pop(i)
+                        content["projects"] = projects
+                        save_content(content)
                         st.rerun()
-        else:
-            st.info("Aucun fichier pour le moment.")
+            if st.button("Ajouter un projet"):
+                projects.append({
+                    "title": "Nouveau projet", "category": "", "meta": "", "result": "", "prize": "",
+                    "abstract": "", "specs_text": "", "images": "",
+                })
+                content["projects"] = projects
+                save_content(content)
+                st.rerun()
+            if st.button("Enregistrer — Projets", type="primary"):
+                content["projects"] = projects
+                save_content(content)
+                st.success("Enregistré.")
+                st.rerun()
+
+        # ---- Certifications ------------------------------------------
+        with tabs[4]:
+            st.subheader("Certifications")
+            cert_df = pd.DataFrame(content["certifications"])
+            edited_cert = st.data_editor(
+                cert_df,
+                num_rows="dynamic",
+                width="stretch",
+                key="editor_certifications",
+            )
+            if st.button("Enregistrer — Certifications", type="primary"):
+                content["certifications"] = edited_cert.fillna("").to_dict(orient="records")
+                save_content(content)
+                st.success("Enregistré.")
+                st.rerun()
+
+        # ---- Fichiers ---------------------------------------------------
+        with tabs[5]:
+            st.subheader("Fichiers (certificats, diplômes, photos)")
+            os.makedirs(UPLOAD_DIR, exist_ok=True)
+            uploaded = st.file_uploader(
+                "Ajouter des fichiers",
+                type=["png", "jpg", "jpeg", "pdf"],
+                accept_multiple_files=True,
+            )
+            if uploaded:
+                for f in uploaded:
+                    dest = os.path.join(UPLOAD_DIR, f.name)
+                    with open(dest, "wb") as out:
+                        out.write(f.getbuffer())
+                st.success(f"{len(uploaded)} fichier(s) ajouté(s).")
+                st.rerun()
+
+            existing = sorted(os.listdir(UPLOAD_DIR)) if os.path.isdir(UPLOAD_DIR) else []
+            if existing:
+                st.markdown("**Fichiers enregistrés** — utilisez le nom exact dans les champs image ci-dessus.")
+                gcols = st.columns(4)
+                for i, fname in enumerate(existing):
+                    fpath = os.path.join(UPLOAD_DIR, fname)
+                    with gcols[i % 4]:
+                        if fname.lower().endswith((".png", ".jpg", ".jpeg")):
+                            st.image(fpath, caption=fname, width="stretch")
+                        else:
+                            st.markdown(f"**{fname}**")
+                        if st.button("Supprimer", key=f"del_{fname}"):
+                            os.remove(fpath)
+                            st.rerun()
+            else:
+                st.info("Aucun fichier pour le moment.")
 
         st.write("")
         if st.button("Se déconnecter"):
