@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 venv/
 .streamlit/secrets.toml
+cloudflared.exe
+cloudflared.log
+streamlit_run.log
+

@@ -211,39 +211,138 @@ EDUCATION = [
     },
 ]
 
-HACKATHONS = [
+PROJECTS = [
     {
-        "title": "CITx.C 2026 Innovation Competition — IEEE ICCITX.0",
-        "result": "🏆 Winner · 5 000 MAD",
-        "desc": "SecureProd sélectionné Top 10 parmi 77 projets de 5 pays. Solution de cybersécurité "
-        "industrielle IA pour l'Industrie 4.0 et le Smart Manufacturing.",
-        "image": "hackathon_collage.png",
+        "title": "SecureProd — AI-Assisted Intrusion Detection for SCADA/ICS",
+        "category": "Cybersécurité / Industrie 4.0",
+        "meta": "Équipe Secure Prod (avec Kaouthar Belkebir) · Teal Technology Services · Jul. 2025",
+        "result": "🥇 1st Place",
+        "prize": "30 000 DHS",
+        "abstract": "Les réseaux SCADA/ICS ont vu une hausse documentée de 54% des attaques ciblées, tout en "
+        "reposant sur des protocoles historiques (Modbus TCP, DNP3) sans authentification ni chiffrement natifs. "
+        "SecureProd combine un parsing conscient des protocoles avec un modèle de détection d'anomalies "
+        "supervisé pour signaler en temps réel les comportements OT anormaux, et restitue le risque sous forme "
+        "de carte de menace 3D pour les opérateurs d'usine. Conçu et livré en 36 heures de hackathon.",
+        "specs": [
+            ("Protocoles sécurisés", "Modbus TCP, DNP3"),
+            ("Méthode de détection", "Modèle supervisé de détection d'anomalies"),
+            ("Mode de déploiement", "Tap réseau passif (non-intrusif)"),
+            ("Visualisation", "Carte de menace 3D en temps réel"),
+            ("Reporting", "Export automatisé prêt pour audit de conformité"),
+            ("Fenêtre de développement", "36 heures (format hackathon)"),
+        ],
+        "images": ["secureprod_logo.png", "secureprod_photo.png"],
     },
     {
-        "title": "AI for Industry Hackathon — Teal Technology Services",
-        "result": "🥇 1st Place · 30 000 MAD",
-        "desc": "SecureProd : surveillance proactive, détection d'anomalies par IA et communications "
-        "sécurisées pour environnements SCADA/ICS. Avec Kaouthar Belkebir.",
-        "image": None,
-    },
-    {
-        "title": "Hackathon — ACCEDE Internationale",
-        "result": "🥇 1st Place · 10 000 MAD",
-        "desc": "Développement de Vamosway, une application web, en équipe.",
-        "image": None,
-    },
-    {
-        "title": "Game4Health Hackathon — ISMAGI Rabat",
-        "result": "🥈 2nd Place · 6 000 MAD",
-        "desc": "NEURO FIT : plateforme de rééducation par IA utilisant des signaux EMG de surface en temps réel "
-        "pour gamifier la kinésithérapie. Précision de 93%, suivi de la fatigue et rapports cliniques automatisés.",
-        "image": None,
-    },
-    {
-        "title": "AI for Social Impact Hackathon — ESITH Casablanca",
+        "title": "NEURO FIT — Gamified EMG Biofeedback for Muscular Rehabilitation",
+        "category": "Santé Digitale / Gamification",
+        "meta": "Équipe ESITH — Reda et al. · Game4Health, ISMAGI Rabat × SmartTech Lab · 4 avr. 2026",
         "result": "🥈 2nd Place",
-        "desc": "Solution IA multidisciplinaire répondant à un enjeu social réel.",
-        "image": None,
+        "prize": "6 000 DHS",
+        "abstract": "L'adhérence aux protocoles de rééducation musculaire est limitée par le manque de retour "
+        "immédiat des exercices classiques de physiothérapie. NEURO FIT capte le signal EMG de surface (sEMG) "
+        "via électrodes à l'avant-bras et transforme l'activation musculaire en gameplay temps réel autour de "
+        "trois objectifs — Follow, Avoid, Maintain. Lors d'une démonstration live, le système a atteint une "
+        "précision de 93% avec un taux de fatigue détecté de 0% et un rapport de session généré automatiquement "
+        "pour le suivi clinique à distance.",
+        "specs": [
+            ("Source du signal", "EMG de surface, électrodes 2 canaux à l'avant-bras"),
+            ("Métriques live", "Score de précision, fatigue musculaire, charge du modèle ML"),
+            ("Sortie observée (démo)", "Amplitude temps réel 354 μV, précision 93%, fatigue 0%"),
+            ("Modes de jeu", "Follow, Avoid, Maintain"),
+            ("Reporting", "Rapport de session automatisé pour suivi clinicien"),
+        ],
+        "images": ["neurofit_dashboard.png", "neurofit_electrodes.png", "neurofit_presenting.png", "neurofit_award.png"],
+    },
+    {
+        "title": "Vamosway — Full-Stack Mobility & Travel Web Application",
+        "category": "Web Application / Mobilité",
+        "meta": "Équipe Vamosway · ACCEDE Internationale · Track Sciences et Technologie",
+        "result": "🥇 1st Place",
+        "prize": "10 000 DHS",
+        "abstract": "Application web full-stack conçue et livrée dans la fenêtre fixe d'un hackathon pour "
+        "répondre à un enjeu de mobilité du track « Sciences et Technologie ». Priorité donnée à un parcours "
+        "utilisateur cohérent et fonctionnel plutôt qu'à une exhaustivité des fonctionnalités — cadrage du "
+        "problème, conception de l'interface, implémentation et pitch live devant le jury.",
+        "specs": [
+            ("Livrable", "Application web full-stack"),
+            ("Format d'équipe", "Équipe pluridisciplinaire étudiante"),
+            ("Critères d'évaluation", "Innovation, utilisabilité, exécution technique"),
+            ("Fenêtre de développement", "Format hackathon (budget temps fixe)"),
+        ],
+        "images": [],
+    },
+    {
+        "title": "AI for Social Impact — Applied Machine Learning Prototype",
+        "category": "Intelligence Artificielle Appliquée",
+        "meta": "Équipe ESITH — Reda Ouzidane · Hackathon ESITH Casablanca · Track AI for Social Impact",
+        "result": "🥈 2nd Place",
+        "prize": None,
+        "abstract": "Prototype IA fonctionnel développé pour répondre à un besoin social réel plutôt qu'à une "
+        "simple preuve de concept sur données synthétiques, dans le cadre du track « AI for Social Impact » "
+        "de l'ESITH Casablanca. Évalué sur la pertinence par rapport au besoin social, la faisabilité "
+        "technique et la qualité d'exécution.",
+        "specs": [
+            ("Livrable", "Prototype IA fonctionnel"),
+            ("Critères d'évaluation", "Pertinence, faisabilité, exécution technique"),
+            ("Institution hôte", "ESITH Casablanca"),
+        ],
+        "images": [],
+    },
+    {
+        "title": "Le Phare de l'Entrepreneuriat — Social-Impact Venture Award",
+        "category": "Entrepreneuriat Social",
+        "meta": "Reda Ouzidane · KEDGE Business School · 15 mai 2025",
+        "result": "🏅 Prix Impact Positif & Social",
+        "prize": "10 000 DHS",
+        "abstract": "Compétition d'entrepreneuriat de KEDGE Business School évaluant les ventures candidates sur "
+        "deux axes combinés : viabilité entrepreneuriale et impact social positif démontrable. La venture a été "
+        "reconnue pour sa capacité à combiner innovation et création de valeur sociale mesurable, avec un pitch "
+        "live à Casablanca.",
+        "specs": [
+            ("Prix", "Prix Impact Positif & Social"),
+            ("Institution hôte", "KEDGE Business School"),
+            ("Lieu", "Casablanca, Maroc"),
+        ],
+        "images": ["le_phare_photo.png"],
+    },
+    {
+        "title": "Industry 4.0, AI & Cybersecurity for Smart Manufacturing",
+        "category": "Industrie 4.0 / Smart Manufacturing",
+        "meta": "Ouzidane R., Baroudi M., Fahsi Y. · ESITH, Maroc · IEEE ICCITX.0 2026, Paris",
+        "result": "🌍 Top 10 Finalist",
+        "prize": "77 projets · 5 pays",
+        "abstract": "Projet de recherche et d'innovation à l'intersection de l'Industrie 4.0, de l'IA, de la "
+        "cybersécurité et du smart manufacturing, soumis au concours d'innovation CITx.C 2026. Sélectionné "
+        "Top 10 Finaliste parmi 77 projets évalués sur 3 phases, annoncé lors de la session de clôture de la "
+        "conférence internationale IEEE ICCITX.0 2026 à Paris, cérémonie de remise des prix le 16 juin 2026.",
+        "specs": [
+            ("Soumissions évaluées", "77 projets, 5 pays"),
+            ("Résultat", "Top 10 Finalist"),
+            ("Domaine", "Industrie 4.0, IA, cybersécurité, smart manufacturing"),
+            ("Conférence", "IEEE ICCITX.0 2026, Paris, France"),
+            ("Organisations partenaires", "Fondation UTT, Chaire Connected Innovation"),
+        ],
+        "images": ["ieee_finalist_screenshot.png"],
+    },
+    {
+        "title": "Red Team Practitioner — Offensive Security Track",
+        "category": "Sécurité Offensive",
+        "meta": "TryHackMe · Profil : tryhackme.com/p/OUZIDANEREDA",
+        "result": "🏆 Top 5%",
+        "prize": None,
+        "abstract": "Parcours pratique de sécurité offensive développé via des labs hands-on couvrant l'ensemble "
+        "du cycle de vie d'un adversaire — de la reconnaissance initiale au reporting post-exploitation. "
+        "Classement dans le top 5% des utilisateurs de la plateforme, avec compétences démontrées en "
+        "simulation d'adversaire, développement d'exploits, analyse réseau et reporting technique.",
+        "specs": [
+            ("Adversary simulation", "Reproduction de techniques d'attaquants réels"),
+            ("Penetration testing", "Identification et exploitation de vulnérabilités"),
+            ("Exploit development", "Développement d'outils de compromission"),
+            ("Network analysis", "Étude du trafic pour identifier des enjeux de sécurité"),
+            ("Risk & reporting", "Évaluation des risques et documentation claire"),
+        ],
+        "images": [],
     },
 ]
 
@@ -330,11 +429,11 @@ st.write("")
 
 stat_cols = st.columns(5)
 stats = [
-    ("6+", "Hackathons gagnés"),
+    ("7", "Projets & hackathons"),
     ("18", "Certifications"),
     ("2 968", "Abonnés LinkedIn"),
     ("500+", "Relations"),
-    ("3", "Pays représentés (IEEE)"),
+    ("5", "Pays au concours IEEE"),
 ]
 for col, (num, lbl) in zip(stat_cols, stats):
     with col:
@@ -365,10 +464,19 @@ if section == "Accueil":
     )
 
     st.subheader("Aperçu du parcours")
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns(3)
     with c1:
-        safe_image("hackathon_collage.png", caption="Hackathons & compétitions")
+        safe_image("secureprod_photo.png", caption="SecureProd — 1st Place, Teal Technology Services")
     with c2:
+        safe_image("ieee_finalist_screenshot.png", caption="Top 10 Finalist — IEEE ICCITX.0 2026, Paris")
+    with c3:
+        safe_image("le_phare_photo.png", caption="Prix Impact Positif & Social — KEDGE")
+    c4, c5, c6 = st.columns(3)
+    with c4:
+        safe_image("neurofit_presenting.png", caption="NEURO FIT — Game4Health, ISMAGI Rabat")
+    with c5:
+        safe_image("hackathon_collage.png", caption="Hackathons & compétitions")
+    with c6:
         safe_image("pfe_defense.jpg", caption="Soutenance PFE — WMS chez DOUNITEX")
 
 elif section == "Expérience":
@@ -406,20 +514,35 @@ elif section == "Expérience":
 
 elif section == "Hackathons & Projets":
     st.header("Hackathons & Projets")
-    cols = st.columns(2)
-    for i, h in enumerate(HACKATHONS):
-        with cols[i % 2]:
-            safe_image(h["image"] or "hackathon_placeholder.png")
-            st.markdown(
-                f"""
-                <div class="card">
-                    <h4>{h['title']}</h4>
-                    <div class="meta">{h['result']}</div>
-                    <p>{h['desc']}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+    st.caption("Fiches techniques de projets — cybersécurité, IA appliquée, santé digitale & entrepreneuriat social")
+    for p in PROJECTS:
+        prize_html = f" · <b>{p['prize']}</b>" if p["prize"] else ""
+        specs_rows = "".join(
+            f"<tr><td style='padding:0.3rem 0.8rem 0.3rem 0; color:#8fa3a8; white-space:nowrap;'>{k}</td>"
+            f"<td style='padding:0.3rem 0; color:#dbe6e8;'>{v}</td></tr>"
+            for k, v in p["specs"]
+        )
+        st.markdown(
+            f"""
+            <div class="card">
+                <div class="meta" style="text-transform:uppercase; letter-spacing:0.05em; font-size:0.75rem;">{p['category']}</div>
+                <h4>{p['title']}</h4>
+                <div class="meta">{p['meta']}</div>
+                <div class="impact">{p['result']}{prize_html}</div>
+                <p style="margin-top:0.7rem;">{p['abstract']}</p>
+                <table style="width:100%; border-collapse:collapse; margin-top:0.6rem; font-size:0.85rem;">
+                    {specs_rows}
+                </table>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if p["images"]:
+            img_cols = st.columns(len(p["images"]))
+            for col, img in zip(img_cols, p["images"]):
+                with col:
+                    safe_image(img)
+        st.write("")
 
 elif section == "Formation":
     st.header("Formation")
