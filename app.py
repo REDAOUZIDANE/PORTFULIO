@@ -12,7 +12,7 @@ st.set_page_config(
     page_title="Ouzidane Reda | Portfolio",
     page_icon="R",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 IMG_DIR = "images"
@@ -372,10 +372,6 @@ st.markdown(
         0%, 100% { border-left-color: #6f93b8; }
         50% { border-left-color: #c9a15a; }
     }
-    @keyframes typing {
-        from { width: 0; }
-        to { width: 100%; }
-    }
     @keyframes blinkCursor {
         50% { border-right-color: transparent; }
     }
@@ -399,11 +395,10 @@ st.markdown(
 
     .typewriter {
         display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
         border-right: 2px solid #6f93b8;
         max-width: 100%;
     }
+    .typewriter.blink { animation: blinkCursor 0.8s step-end infinite; }
 
     .status-dot {
         display: inline-block;
@@ -585,7 +580,7 @@ st.markdown(
     f"""
     <div class="hero-card">
         <h1>Ouzidane Reda</h1>
-        <p class="typewriter" style="width:{len(SUBTITLE)}ch; animation: typing 1.8s steps({len(SUBTITLE)}, end) both, blinkCursor 0.8s step-end infinite; font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem;">{SUBTITLE}</p>
+        <p class="typewriter type-target" data-full-text="{SUBTITLE}" style="font-size:1.1rem; color:#b7c1cc; margin-top:-0.6rem; min-height:1.4em;">{SUBTITLE}</p>
         <p style="color:#9aa3af; margin-top:0.8rem; max-width:56rem;">{content['tagline']}</p>
         <div style="margin-top:1rem;">{badges_html}</div>
     </div>
@@ -638,6 +633,27 @@ st.iframe(
                 else { el.textContent = target.toLocaleString('fr-FR') + suffix; }
             }
             requestAnimationFrame(step);
+        });
+    })();
+    (function typeText() {
+        const doc = window.parent.document;
+        const targets = doc.querySelectorAll('.type-target:not([data-typed])');
+        targets.forEach(el => {
+            el.setAttribute('data-typed', '1');
+            const full = el.getAttribute('data-full-text') || '';
+            el.textContent = '';
+            let i = 0;
+            const speed = 28;
+            function typeStep() {
+                i += 1;
+                el.textContent = full.slice(0, i);
+                if (i < full.length) {
+                    setTimeout(typeStep, speed);
+                } else {
+                    el.classList.add('blink');
+                }
+            }
+            setTimeout(typeStep, speed);
         });
     })();
     </script>
